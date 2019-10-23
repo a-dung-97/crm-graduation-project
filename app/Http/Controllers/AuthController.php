@@ -70,6 +70,7 @@ class AuthController extends Controller
         if (!$token = auth()->attempt($credentials)) {
             return response()->json(['message' => 'Sai tài khoản hoặc mật khẩu'], 401);
         }
+        if (!auth()->user()->active) return response(['message' => 'Tài khoản của bạn đang bị khóa'], Response::HTTP_NOT_ACCEPTABLE);
         if (!auth()->user()->email_verified_at)
             return response(['message' => 'Bạn chưa xác nhận email', 'data' => ['user_id' => auth()->user()->id]], Response::HTTP_NOT_ACCEPTABLE);
         return $this->respondWithToken($token);
@@ -84,8 +85,15 @@ class AuthController extends Controller
     {
         $user = auth()->user();
         return response(['data' => [
-            'name' => $user->full_name,
-            'roles' => $user->role ?  [$user->role->code] : [],
+            "id" => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'avatar' => $user->avatar,
+            'phone_number' => $user->phone_number,
+            'roles' => $user->role_id ?  [$user->role->code] : [],
+            'company' => $user->company_id ? $user->company->name : null,
+            'department' => $user->department_id ? $user->department->name : null,
+            'position' => $user->position_id ? $user->position->name : null,
         ]]);
     }
 

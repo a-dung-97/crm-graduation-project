@@ -25,7 +25,6 @@ class CompanyRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'code' => 'required|unique:companies',
             'address' => 'required'
         ];
     }
@@ -33,8 +32,6 @@ class CompanyRequest extends FormRequest
     {
         return [
             'name.required' => 'Bạn chưa nhập tên công ty',
-            'code.required' => 'Bạn chưa nhập mã công ty',
-            'code.unique' => 'Mã công ty này đã tồn tại',
             'address.required' => 'Bạn chưa nhập địa chỉ công ty'
         ];
     }

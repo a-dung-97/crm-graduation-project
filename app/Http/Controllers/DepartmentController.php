@@ -19,7 +19,7 @@ class DepartmentController extends Controller
     {
         $perPage = $request->query('per_page');
         $search = $request->query('search');
-        $query =  Department::query()->with('parent');
+        $query =  Department::query()->latest('id')->with('parent');
         if ($search) $query = $query->where('name', 'like', '%' . $search . '%')->orWhere('description', 'like', '%' . $search . '%');
         $query = $perPage ? $query->paginate($perPage) : $query->get();
         return DepartmentResource::collection($query);
