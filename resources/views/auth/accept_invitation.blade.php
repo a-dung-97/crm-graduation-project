@@ -39,15 +39,23 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header text-center">Xin chào dungnknd97@gmail.com, để tham gia ADCRM, hãy đăng
+                        <div class="card-header text-center">Xin chào {{ $email }}, để tham gia ADCRM, hãy
+                            đăng
                             kí tài khoản của bạn</div>
                         <div class="card-body">
                             <form name="my-form" onsubmit="return validform()" method="POST">
                                 @csrf
                                 <div class="form-group row">
-                                    <label for="full_name" class="col-md-4 col-form-label text-md-right">Họ tên</label>
+                                    <label for="name" class="col-md-4 col-form-label text-md-right">Họ tên</label>
                                     <div class="col-md-6">
-                                        <input type="text" id="full-name" class="form-control" name="full_name">
+                                        <input type="text" id="full-name" class="form-control" name="name">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="phone_number" class="col-md-4 col-form-label text-md-right">Số điện
+                                        thoại</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="phone-number" class="form-control" name="phone_number">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -81,15 +89,28 @@
     <script>
         function validform() {
 
-var a = document.forms["my-form"]["full_name"].value;
+var a = document.forms["my-form"]["name"].value;
 var b = document.forms["my-form"]["password"].value;
 var c = document.forms["my-form"]["password_confirmation"].value;
-
+var d = document.forms["my-form"]["phone_number"].value;
 if (a==null || a=="")
 {
     alert("Hãy nhập họ tên của bạn");
     return false;
-}else if (b==null || b=="")
+}
+else if(d==null||d==""){
+    alert("Hãy nhập số điện thoại")
+    return false;
+}
+else if(!d.match(
+            /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
+        )){
+        
+                alert("Số điện thoại không đúng")
+    return false;
+}
+else if (b==null || b=="")
+
 {
     alert("Hãy nhập mật khẩu");
     return false;
@@ -106,6 +127,7 @@ else if( b!=c){
     alert("Mật khẩu chưa trùng khớp")
     return false;
 }
+
 
 }
     </script>

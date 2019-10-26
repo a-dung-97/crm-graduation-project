@@ -20,4 +20,12 @@ class Position extends Model
     {
         return $this->belongsTo('App\Position', 'parent_id');
     }
+    public function children()
+    {
+        return $this->hasMany('App\Position', 'parent_id');
+    }
+    public function childrenRecursive()
+    {
+        return $this->children()->with('childrenRecursive');
+    }
 }

@@ -19,7 +19,7 @@ class DepartmentResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'parent_id' => $this->parent_id,
-            'parent' => $this->parent ? $this->parent->name : 'Công ty'
+            'parent' => $this->parent ? $this->parent->name : null
         ];
     }
 }

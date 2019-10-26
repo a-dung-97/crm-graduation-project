@@ -20,4 +20,12 @@ class Department extends Model
     {
         return $this->belongsTo('App\Department', 'parent_id');
     }
+    public function children()
+    {
+        return $this->hasMany('App\Department', 'parent_id');
+    }
+    public function childrenRecursive()
+    {
+        return $this->children()->with('childrenRecursive');
+    }
 }

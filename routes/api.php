@@ -23,10 +23,20 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('departments/recursive', 'DepartmentController@getChildrenRecursive');
     Route::apiResource('departments', 'DepartmentController', ['except' => ['show']]);
+    Route::get('positions/recursive', 'PositionController@getChildrenRecursive');
     Route::apiResource('positions', 'PositionController', ['except' => ['show']]);
+
+
     Route::post('users/avatar', 'UserController@changeAvatar');
     Route::get('users/company', 'UserController@getCompany');
     Route::put('users/company', 'UserController@updateCompany');
+    Route::post('users/invite', 'UserController@inviteUser');
     Route::apiResource('users', 'UserController', ['except' => ['show']]);
+
+    Route::apiResource('roles', 'RoleController', ['except' => ['show']]);
+
+    Route::post('groups/user/{group}', 'GroupController@updateUsers');
+    Route::apiResource('groups', 'GroupController', ['except' => ['show']]);
 });

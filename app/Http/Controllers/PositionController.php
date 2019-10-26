@@ -38,14 +38,38 @@ class PositionController extends Controller
     }
     public function update(PositionRequest $request, Position $position)
     {
+        $result = collect([]);
+        $position->childrenRecursive->each(function ($item) use (&$result) {
+            $result->push($item->id);
+            $this->getAllChildren($item, $result);
+        });
+        if ($result->contains($request->parent_id)) return response(['message' => "Không thể chọn vì chức vụ là cấp dưới"], 400);
+        if ($request->parent_id == $position->id) return response(['message' => 'Không thể chọn chức vụ hiện tại là cấp trên'], 400);
         $position->update($request->all());
         return response(['message' => 'updated'], Response::HTTP_ACCEPTED);
     }
+    public function getAllChildren($position, &$result)
+    {
 
+        $position->childrenRecursive->each(function ($item) use (&$result) {
+            $result->push($item->id);
+            if ($item->childrenRecursive->count() > 0) $this->getAllChildren($item, $result);
+        });
+    }
+
+    public function getChildrenRecursive()
+    {
+        return ['data' => Position::whereNull('parent_id')->with('childrenRecursive')->get()];
+    }
 
     public function destroy(Position $position)
     {
-        $position->delete();
-        return response(null, Response::HTTP_NO_CONTENT);
+        if ($position->children()->count() > 0) return response(['message' => 'Không thể xóa cáp trên'], 400);
+        try {
+            $position->delete();
+            return response(null, Response::HTTP_NO_CONTENT);
+        } catch (\Throwable $th) {
+            return response(['message' => 'Chức vụ này chứa người dùng']);
+        }
     }
 }

@@ -18,7 +18,7 @@ class CreatePositionsTable extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->unsignedInteger('parent_id')->nullable();
-            $table->foreign('parent_id')->references('id')->on('positions')->onDelete('set null');
+            $table->foreign('parent_id')->references('id')->on('positions');
             $table->unsignedInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
         });

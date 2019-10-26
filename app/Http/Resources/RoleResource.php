@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PositionResource extends JsonResource
+class RoleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +15,10 @@ class PositionResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'parent_id' => $this->parent_id,
-            'parent' => $this->parent ? $this->parent->name : null
+            "id" => $this->id,
+            "name" => $this->name,
+            "code" => $this->code,
+            "description" => $this->description
         ];
     }
 }

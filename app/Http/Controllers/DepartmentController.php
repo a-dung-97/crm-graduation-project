@@ -38,10 +38,30 @@ class DepartmentController extends Controller
     }
     public function update(DepartmentRequest $request, Department $department)
     {
+        $result = collect([]);
+        $department->childrenRecursive->each(function ($item) use (&$result) {
+            $result->push($item->id);
+            $this->getAllChildren($item, $result);
+        });
+        if ($result->contains($request->parent_id)) return response(['message' => "Không thể chọn vì phòng ban là cấp dưới"], 400);
+        if ($request->parent_id == $department->id) return response(['message' => 'Không thể chọn phòng bạn hiện tại là phòng ban cha'], 400);
         $department->update($request->all());
         return response(['message' => 'updated'], Response::HTTP_ACCEPTED);
     }
 
+    public function getAllChildren($department, &$result)
+    {
+
+        $department->childrenRecursive->each(function ($item) use (&$result) {
+            $result->push($item->id);
+            if ($item->childrenRecursive->count() > 0) $this->getAllChildren($item, $result);
+        });
+    }
+
+    public function getChildrenRecursive()
+    {
+        return ['data' => Department::whereNull('parent_id')->with('childrenRecursive')->get()];
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -50,7 +70,12 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
-        $department->delete();
-        return response(null, Response::HTTP_NO_CONTENT);
+        if ($department->children()->count() > 0) return response(['message' => 'Không thể xóa phòng ban cha'], 400);
+        try {
+            $department->delete();
+            return response(null, Response::HTTP_NO_CONTENT);
+        } catch (\Throwable $th) {
+            return response(['message' => 'Phòng ban này chứa người dùng']);
+        }
     }
 }
