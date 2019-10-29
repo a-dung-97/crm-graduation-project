@@ -39,4 +39,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('groups/user/{group}', 'GroupController@updateUsers');
     Route::apiResource('groups', 'GroupController', ['except' => ['show']]);
+
+    Route::post('products/notes/{product}', 'ProductController@addNoteToProduct');
+    Route::post('products/files/{product}', 'ProductController@addFileToProduct');
+    Route::apiResource('products', 'ProductController');
+
+    Route::apiResource('notes', 'NoteController');
+
+    Route::apiResource('files', 'FileController', ['only' => ['destroy']]);
 });
