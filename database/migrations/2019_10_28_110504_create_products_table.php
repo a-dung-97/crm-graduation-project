@@ -28,6 +28,8 @@ class CreateProductsTable extends Migration
             $table->decimal('sale_price', 15, 2)->default(0);
             $table->string('distributor')->nullable();
             $table->text('sale_detail')->nullable();
+            $table->unsignedInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
         });
     }

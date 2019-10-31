@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Receipt extends Model
 {
-    //
+    protected $guarded  = [];
+    public $timestamps = false;
+    public function products()
+    {
+        return $this->morphToMany('App\Product', 'productable')->as('detail')->withPivot('product_id', 'warehouse_id', 'quantity', 'tax', 'unit', 'price');
+    }
 }

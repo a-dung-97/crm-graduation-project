@@ -15,7 +15,7 @@ class GroupController extends Controller
     {
         $perPage = $request->query('per_page');
         $search = $request->query('search');
-        $query =  Group::latest('id');
+        $query =  company()->groups()->latest('id');
         if ($search) $query = $query->where('name', 'like', '%' . $search . '%')->orWhere('description', 'like', '%' . $search . '%');
         $query = $perPage ? $query->with(['users' => function ($query) {
             $query->select('user_id as id');
@@ -45,8 +45,7 @@ class GroupController extends Controller
     }
     public function updateUsers(Group $group, Request $request)
     {
-        $group->users()->detach();
-        $group->users()->attach($request->all());
+        $group->users()->sync($request->all());
         return ['message' => 'updated'];
     }
 }

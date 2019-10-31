@@ -18,6 +18,8 @@ class CreateWarehousesTable extends Migration
             $table->string('name');
             $table->text('address')->nullable();
             $table->text('description')->nullable();
+            $table->unsignedInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 

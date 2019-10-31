@@ -17,7 +17,7 @@ class NoteController extends Controller
         $search = $request->query('search');
         $type = $request->query('type');
         $user = $request->query('user');
-        $query =  Note::latest();
+        $query =  company()->notes()->latest();
         $startDate = $request->query('start');
         $endDate = $request->query('end');
         if ($user) $query = $query->where('user_id', $user);

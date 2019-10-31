@@ -47,4 +47,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('notes', 'NoteController');
 
     Route::apiResource('files', 'FileController', ['only' => ['destroy']]);
+    Route::apiResource('receipts', 'ReceiptController');
+
+    Route::apiResource('warehouses', 'WareHouseController');
 });

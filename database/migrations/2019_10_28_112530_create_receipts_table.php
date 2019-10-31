@@ -16,10 +16,12 @@ class CreateReceiptsTable extends Migration
         Schema::create('receipts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code');
-            $table->text('description');
-            $table->string('manufacturer');
+            $table->text('description')->nullable();
+            $table->string('manufacturer')->nullable();
             $table->date('date');
             $table->boolean('confirmed')->default(false);
+            $table->unsignedInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 

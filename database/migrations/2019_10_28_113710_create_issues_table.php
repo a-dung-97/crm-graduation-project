@@ -22,6 +22,8 @@ class CreateIssuesTable extends Migration
             $table->text('description')->nullable();
             $table->string('recipient')->nullable();
             $table->string('phone_number');
+            $table->unsignedInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 

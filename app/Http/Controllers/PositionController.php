@@ -19,7 +19,7 @@ class PositionController extends Controller
     {
         $perPage = $request->query('per_page');
         $search = $request->query('search');
-        $query =  Position::query()->with('parent');
+        $query =  company()->positions()->with('parent');
         if ($search) $query = $query->where('name', 'like', '%' . $search . '%')->orWhere('description', 'like', '%' . $search . '%');
         $query = $perPage ? $query->paginate($perPage) : $query->get();
         return PositionResource::collection($query);

@@ -24,7 +24,7 @@ class ProductController extends Controller
         $perPage = $request->query('per_page');
         $search = $request->query('search');
         $type = $request->query('type');
-        $query =  Product::latest();
+        $query =  company()->products()->latest();
         if ($type) $query = $query->where('type', $type);
         if ($search) $query = $query->where(function ($query) use ($search) {
             $query->where('name', 'like', '%' . $search . '%')
@@ -40,7 +40,7 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-        Product::create($request->all());
+        company()->products()->create($request->all());
         return response(['message' => 'created'], Response::HTTP_CREATED);
     }
 
@@ -63,7 +63,8 @@ class ProductController extends Controller
             'name' => $file['name'],
             'size' => $file['size'],
             'description' => $request->description,
-            'user_id' => auth()->user()->id
+            'user_id' => auth()->user()->id,
+            'company_id' => company()->id,
         ]);
         return ['message' => 'added'];
     }
@@ -80,6 +81,7 @@ class ProductController extends Controller
     {
         $request = $request->all();
         $request['user_id'] = auth()->user()->id;
+        $request['company_id'] = company()->id;
         $product->notes()->create($request);
         return response(['message' => "added"]);
     }

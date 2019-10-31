@@ -22,6 +22,8 @@ class CreateFilesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('fileable_id');
             $table->string('fileable_type');
+            $table->unsignedInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
         });
     }

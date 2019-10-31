@@ -15,4 +15,12 @@ class Product extends Model
     {
         return $this->morphMany('App\File', 'fileable');
     }
+    public function receipts()
+    {
+        return $this->morphedByMany('App\Receipt', 'productable');
+    }
+    public function issues()
+    {
+        return $this->morphedByMany('App\Issue', 'productable');
+    }
 }

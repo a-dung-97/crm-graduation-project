@@ -28,4 +28,32 @@ class Company extends Model
     {
         return $this->hasMany('App\Role');
     }
+    public function products()
+    {
+        return $this->hasMany('App\Product');
+    }
+    public function warehouses()
+    {
+        return $this->hasMany('App\Warehouse');
+    }
+    public function receipts()
+    {
+        return $this->hasMany('App\Receipt');
+    }
+    public function issues()
+    {
+        return $this->hasMany('App\Issue');
+    }
+    public function notes()
+    {
+        return $this->hasMany('App\Note');
+    }
+    public function tags()
+    {
+        return $this->hasMany('App\Tag');
+    }
+    public function files()
+    {
+        return $this->hasMany('App\File');
+    }
 }

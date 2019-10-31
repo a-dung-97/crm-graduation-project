@@ -19,7 +19,7 @@ class RoleController extends Controller
     {
         $perPage = $request->query('per_page');
         $search = $request->query('search');
-        $query =  Role::latest('id');
+        $query =  company()->roles()->latest('id');
         if ($search) $query = $query->where('name', 'like', '%' . $search . '%')->orWhere('description', 'like', '%' . $search . '%');
         $query = $perPage ? $query->paginate($perPage) : $query->get();
         return RoleResource::collection($query);
