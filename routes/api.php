@@ -40,14 +40,18 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('groups/user/{group}', 'GroupController@updateUsers');
     Route::apiResource('groups', 'GroupController', ['except' => ['show']]);
 
-    Route::post('products/notes/{product}', 'ProductController@addNoteToProduct');
-    Route::post('products/files/{product}', 'ProductController@addFileToProduct');
+    Route::post('products/{product}/note', 'ProductController@addNoteToProduct');
+    Route::post('products/{product}/file', 'ProductController@addFileToProduct');
+    Route::get('products/{product}/note', 'ProductController@getNotes');
+    Route::get('products/{product}/file', 'ProductController@getFiles');
+
     Route::apiResource('products', 'ProductController');
 
     Route::apiResource('notes', 'NoteController');
 
+    Route::post('files/download', 'FileController@download');
     Route::apiResource('files', 'FileController', ['only' => ['destroy']]);
     Route::apiResource('receipts', 'ReceiptController');
-
+    Route::apiResource('issues', 'IssueController');
     Route::apiResource('warehouses', 'WareHouseController');
 });

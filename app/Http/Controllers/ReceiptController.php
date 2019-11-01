@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ReceiptRequest;
 use App\Http\Resources\ReceiptResource;
-use App\Http\Resources\ReceiptWithProductResource;
+use App\Http\Resources\ReceiptAndIssueWithProductResource;
 use App\Receipt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -48,7 +48,7 @@ class ReceiptController extends Controller
      */
     public function show(Receipt $receipt)
     {
-        return new ReceiptWithProductResource($receipt);
+        return new ReceiptAndIssueWithProductResource($receipt);
     }
 
     /**

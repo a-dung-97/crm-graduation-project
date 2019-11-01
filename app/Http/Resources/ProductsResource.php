@@ -16,11 +16,13 @@ class ProductsResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'name' => $this->name,
             'code' => $this->code,
             'manufacturer' => $this->manufacturer,
             'type' => $this->type,
             'barcode' => $this->barcode,
             'brand' => $this->brand,
+            'image' => new ProductImageResource($this->images->where('default', true)->first() ? $this->images->where('default', true)->first() : $this->images->first())
         ];
     }
 }

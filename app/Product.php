@@ -23,4 +23,8 @@ class Product extends Model
     {
         return $this->morphedByMany('App\Issue', 'productable');
     }
+    public function images()
+    {
+        return $this->hasMany('App\ProductImage');
+    }
 }

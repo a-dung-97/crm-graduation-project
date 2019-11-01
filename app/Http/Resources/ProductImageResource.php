@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FIleResouce extends JsonResource
+class ProductImageResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +15,10 @@ class FIleResouce extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->description,
-            'size' => round($this->size / 1024, 2) . ' KB',
-            'user' => $this->user->name,
-            'created_at' => $this->created_at->format('d/m/Y H:i:s'),
+            'path' => config('app.url') . '/storage/products/' . $this->name,
+            'default' => $this->default,
+            'highlight' => $this->default ? 1 : 0,
         ];
     }
 }

@@ -19,7 +19,7 @@ class NoteResource extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'user' => $this->user->name,
-            'created_at' => $this->created_at,
+            'created_at' => $this->created_at->format('d/m/Y H:i:s'),
             'type' => $this->noteable_type,
         ];
     }
