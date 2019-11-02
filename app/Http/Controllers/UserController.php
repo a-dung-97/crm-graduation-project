@@ -97,7 +97,7 @@ class UserController extends Controller
         if ($request->avatar) {
             $image = $request->avatar;
             $name = time() . '.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
-            \Image::make($image)->save(public_path('storage/avatars/') . $name);
+            \Image::make($image)->save(storage_path('app/public/avatars/') . $name);
             $this->user->update(['avatar' => $name]);
             return ['message' => 'Cập nhật thành công', 'data' => ['avatar' => $name]];
         } else return response(['message' => 'Bạn chưa tải ảnh lên'], 400);
