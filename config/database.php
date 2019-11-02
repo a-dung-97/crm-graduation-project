@@ -2,12 +2,7 @@
 
 use Illuminate\Support\Str;
 
-$url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 
-$host = $url["host"];
-$username = $url["user"];
-$password = $url["pass"];
-$database = substr($url["path"], 1);
 return [
 
     /*
@@ -21,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'cleardb'),
+    'default' => env('DB_CONNECTION', 'aws'),
 
     /*
     |--------------------------------------------------------------------------
@@ -40,12 +35,12 @@ return [
     */
 
     'connections' => [
-        'cleardb' => [
+        'aws' => [
             'driver' => 'mysql',
-            'host' => $host,
-            'database' => $database,
-            'username' => $username,
-            'password' => $password,
+            'host' => 'adcrm.c9hjykfym2ea.us-east-1.rds.amazonaws.com',
+            'database' => 'crm',
+            'username' => 'dungnknd97',
+            'password' => '12345678',
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
