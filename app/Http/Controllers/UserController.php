@@ -37,7 +37,9 @@ class UserController extends Controller
     }
     public function update(Request $request, User $user)
     {
-        if ($request->active != $this->user->active && $user->id == $this->user->id) return response(['message' => 'Không thể hủy kích hoạt chủ tài khoản'], 400);
+        if (isset($request->active)) {
+            if ($request->active != $this->user->active && $user->id == $this->user->id) return response(['message' => 'Không thể hủy kích hoạt chủ tài khoản'], 400);
+        }
         $user->update($request->all());
         return response(['message' => 'Cập nhật thành công'], Response::HTTP_ACCEPTED);
     }
