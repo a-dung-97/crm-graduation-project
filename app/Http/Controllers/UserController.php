@@ -40,6 +40,7 @@ class UserController extends Controller
         if (isset($request->active)) {
             if ($request->active != $this->user->active && $user->id == $this->user->id) return response(['message' => 'Không thể hủy kích hoạt chủ tài khoản'], 400);
         }
+
         $user->update($request->all());
         return response(['message' => 'Cập nhật thành công'], Response::HTTP_ACCEPTED);
     }
@@ -92,14 +93,15 @@ class UserController extends Controller
     {
         $oldAvatar = $this->user->avatar;
         if ($oldAvatar) {
-            Storage::delete('public/avatars/' . $oldAvatar);
+            Storage::delete('avatars/' . $oldAvatar);
         }
         if ($request->avatar) {
             $image = $request->avatar;
             $name = time() . '.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
-            \Image::make($image)->save(storage_path('app/public/avatars/') . $name);
+
+            Storage::put('avatars/' . $name, \Image::make($image)->stream());
             $this->user->update(['avatar' => $name]);
-            return ['message' => 'Cập nhật thành công', 'data' => ['avatar' => $name]];
+            return ['message' => 'Cập nhật thành công', 'data' => ['avatar' => Storage::url('avatars/' . $name)]];
         } else return response(['message' => 'Bạn chưa tải ảnh lên'], 400);
     }
     public function getCompany()

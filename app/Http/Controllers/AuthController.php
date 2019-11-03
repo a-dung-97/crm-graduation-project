@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -88,7 +89,7 @@ class AuthController extends Controller
             "id" => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'avatar' => $user->avatar,
+            'avatar' => Storage::url('avatars/' . $user->avatar),
             'phone_number' => $user->phone_number,
             'roles' => $user->role_id ?  [$user->role->code] : [],
             'company' => $user->company_id ? $user->company->name : null,
