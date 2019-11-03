@@ -75,7 +75,7 @@ class ProductController extends Controller
     {
         foreach ($images as $image) {
             $name = time() . '.' . explode('/', explode(':', substr($image['path'], 0, strpos($image['path'], ';')))[1])[1];
-            \Image::make($image['path'])->save(public_path('storage/products/') . $name);
+            Storage::put('products/' . $name, \Image::make($image['path'])->stream());
             $product->images()->create(['name' => $name, 'default' => $image['default']]);
         }
     }
@@ -86,7 +86,7 @@ class ProductController extends Controller
         $currentImages = $product->images;
         $currentImages->pluck('name')->diff(Arr::pluck($images, 'name'))->each(function ($image) use ($product) {
             $product->images()->where('name', $image)->first()->delete();
-            Storage::delete('public/products/' . $image);
+            Storage::delete('products/' . $image);
         });
         $newImage = collect($images)->pluck('name')->diff($currentImages->pluck('name')->all())->flatten();
         collect($images)->whereNotIn('name', $newImage)->values()->each(function ($image) use ($product) {
@@ -113,7 +113,7 @@ class ProductController extends Controller
         $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '_' . time() . '.' . $file->getClientOriginalExtension();
         $fileSize = $file->getSize();
         $file->storeAs(
-            'public/upload',
+            'upload',
             $fileName
         );
         return collect(['name' => $fileName, 'size' => $fileSize]);

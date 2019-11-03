@@ -11,12 +11,12 @@ class FileController extends Controller
 {
     public function destroy(File $file)
     {
-        Storage::delete('public/upload/' . $file->name);
+        Storage::delete('upload/' . $file->name);
         $file->delete();
         return response(null, Response::HTTP_NO_CONTENT);
     }
     public  function download(Request $request)
     {
-        return Storage::download('public/upload/' . $request->name);
+        return Storage::download('upload/' . $request->name);
     }
 }
