@@ -30,7 +30,7 @@ class ProductResource extends JsonResource
             'distributor' => $this->distributor,
             'sale_detail' => $this->sale_detail,
             'created_at' => $this->created_at,
-            'images' => ProductImageResource::collection($this->images()->latest('product_images.default')->get())
+            'images' => ProductImageResource::collection($this->images()->latest('default')->get())
         ];
     }
 }
