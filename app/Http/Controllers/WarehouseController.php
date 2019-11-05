@@ -25,7 +25,7 @@ class WarehouseController extends Controller
     }
 
 
-    public function store(WareHouseRequest $request)
+    public function store(WarehouseRequest $request)
     {
         company()->warehouses()->create($request->all());
         return created();
