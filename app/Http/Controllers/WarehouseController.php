@@ -20,7 +20,7 @@ class WarehouseController extends Controller
         $search = $request->query('search');
         $query =  company()->warehouses()->latest('id');
         if ($search) $query = $query->where('name', 'like', '%' . $search . '%')->orWhere('description', 'like', '%' . $search . '%');
-        $query = $perPage ? $query->paginate($perPage) : $query->get();
+        $query = $perPage ? $query->paginate($perPage) : $query->select('id', 'name')->get();
         return WarehouseResource::collection($query);
     }
 
@@ -38,8 +38,8 @@ class WarehouseController extends Controller
         return updated();
     }
 
-    public function destroy(WareHouse $wareHouse)
+    public function destroy(Warehouse $warehouse)
     {
-        return delete($wareHouse);
+        return delete($warehouse);
     }
 }

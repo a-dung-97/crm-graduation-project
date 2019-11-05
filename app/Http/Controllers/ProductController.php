@@ -26,6 +26,7 @@ class ProductController extends Controller
     {
         $perPage = $request->query('per_page');
         $search = $request->query('search');
+        $name = $request->query('name');
         $type = $request->query('type');
         $query =  company()->products()->with('images')->latest();
         if ($type) $query = $query->where('type', $type);
@@ -36,10 +37,12 @@ class ProductController extends Controller
                 ->orWhere('brand', 'like', '%' . $search . '%')
                 ->orWhere('manufacturer', 'like', '%' . $search . '%');
         });
-
+        if ($name) $query = $query->where('name', 'like', '%' . $name . '%');
         $query = $perPage ? $query->paginate($perPage) : $query->get();
         return ProductsResource::collection($query);
     }
+
+
 
     public function store(ProductRequest $request)
     {

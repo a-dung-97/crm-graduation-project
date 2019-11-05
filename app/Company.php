@@ -56,4 +56,8 @@ class Company extends Model
     {
         return $this->hasMany('App\File');
     }
+    public function inventories()
+    {
+        return $this->hasMany('App\Inventory');
+    }
 }

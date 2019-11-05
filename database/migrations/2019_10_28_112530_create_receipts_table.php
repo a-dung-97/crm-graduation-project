@@ -17,7 +17,7 @@ class CreateReceiptsTable extends Migration
             $table->increments('id');
             $table->string('code');
             $table->text('description')->nullable();
-            $table->string('manufacturer')->nullable();
+            $table->string('supplier')->nullable();
             $table->date('date');
             $table->boolean('confirmed')->default(false);
             $table->unsignedInteger('company_id');

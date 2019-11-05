@@ -16,17 +16,15 @@ class ProductableResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
+            'product_id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'detail' => [
-                'warehouse_id' => $this->detail->warehouse_id,
-                'warehouse_name' => Warehouse::find($this->detail->warehouse_id)->name,
-                'quantity' => $this->detail->quantity,
-                'unit' => $this->detail->unit,
-                'tax' => $this->detail->tax,
-                'price' => $this->detail->price,
-            ]
+            'warehouse_id' => $this->detail->warehouse_id,
+            'quantity' => $this->detail->quantity,
+            'unit' => $this->detail->unit,
+            'tax' => $this->detail->tax,
+            'price' => $this->detail->price,
+
         ];
     }
 }

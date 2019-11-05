@@ -22,6 +22,9 @@ class ProductsResource extends JsonResource
             'type' => $this->type,
             'barcode' => $this->barcode,
             'brand' => $this->brand,
+            'sale_price' => $this->sale_price,
+            'unit' => $this->unit,
+            'tax' => $this->tax,
             'image' => new ProductImageResource($this->images->where('default', true)->first() ? $this->images->where('default', true)->first() : $this->images->first())
         ];
     }

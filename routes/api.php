@@ -54,4 +54,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('receipts', 'ReceiptController');
     Route::apiResource('issues', 'IssueController');
     Route::apiResource('warehouses', 'WareHouseController');
+
+    Route::get('inventories', 'InventoryController@index');
 });
