@@ -60,4 +60,8 @@ class Company extends Model
     {
         return $this->hasMany('App\Inventory');
     }
+    public function catalogs()
+    {
+        return $this->hasMany('App\Catalog');
+    }
 }
