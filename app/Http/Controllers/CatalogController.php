@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Catalog;
 use App\Http\Requests\CatalogRequest;
 use App\Http\Resources\CatalogResource;
+use Symfony\Component\HttpFoundation\Request;
 
 class CatalogController extends Controller
 {
@@ -31,5 +32,14 @@ class CatalogController extends Controller
     public function destroy(Catalog $catalog)
     {
         delete($catalog);
+    }
+    public function listCatalogs(Request $request)
+    {
+        $root = $request->query('root');
+        $parent = $request->query('parent');
+        return ['data' => Catalog::where([
+            ['parent_id', null],
+            ['name', $root],
+        ])->first()->catalogs()->where('name', $parent)->first()->catalogs()->select('id', 'name')->get()];
     }
 }

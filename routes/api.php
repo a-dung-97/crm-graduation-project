@@ -56,5 +56,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('warehouses', 'WarehouseController');
     Route::get('inventories', 'InventoryController@index');
 
+    Route::get('catalogs/list', 'CatalogController@listCatalogs');
     Route::apiResource('catalogs', 'CatalogController', ['except' => 'show']);
+
+    Route::apiResource('leads', 'LeadController');
 });

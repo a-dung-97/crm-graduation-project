@@ -78,10 +78,10 @@ class CatalogSeeder extends Seeder
             ['name' => 'Cửa hàng trực tuyến', 'description' => 'Cửa hàng trực tuyến', 'company_id' => 1],
             ['name' => 'Tham chiếu từ bên ngoài', 'description' => 'Tham chiếu từ bên ngoài', 'company_id' => 1],
             ['name' => 'Tham chiếu từ nhân viên', 'description' => 'Tham chiếu từ nhân viên', 'company_id' => 1],
-            ['name' => 'Gọi điện thoạ', 'description' => 'Gọi điện thoạ', 'company_id' => 1],
+            ['name' => 'Gọi điện thoại', 'description' => 'Gọi điện thoại', 'company_id' => 1],
             ['name' => 'Quảng cáo', 'description' => 'Quảng cáo', 'company_id' => 1],
         ]);
-        $opportunity->catalogs()->create(['name' => 'Trạng thái'])->catalogs()->createMany([
+        $lead->catalogs()->create(['name' => 'Trạng thái'])->catalogs()->createMany([
             ['name' => 'Không đủ tư cách', 'description' => 'Không đủ tư cách', 'company_id' => 1],
             ['name' => 'Chưa liên hệ', 'description' => 'Chưa liên hệ', 'company_id' => 1],
             ['name' => 'Chào hàng mất', 'description' => 'Chào hàng mất', 'company_id' => 1],
@@ -90,7 +90,14 @@ class CatalogSeeder extends Seeder
             ['name' => 'Liên hệ trong tương lai', 'description' => 'Liên hệ trong tương lai', 'company_id' => 1],
             ['name' => 'Đã thử liên hệ', 'description' => 'Đã thử liên hệ', 'company_id' => 1],
         ]);
-        $opportunity->catalogs()->create(['name' => 'Ngành nghề']);
+        $lead->catalogs()->create(['name' => 'Ngành nghề'])->catalogs()->createMany([
+            ['name' => 'CNTT', 'description' => 'Công nghệ thông tin', 'company_id' => 1],
+            ['name' => 'Giáo dục', 'description' => 'Giáo dục', 'company_id' => 1],
+            ['name' => 'Bất động sản', 'description' => 'Bất động sản', 'company_id' => 1],
+            ['name' => 'Bán lẻ', 'description' => 'Bán lẻ', 'company_id' => 1],
+        ]);
+
+
 
         $order = Catalog::create(['name' => 'Đơn hàng']);
         $order->catalogs()->create(['name' => 'Trạng thái'])->catalogs()->createMany([

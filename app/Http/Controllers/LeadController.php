@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LeadRequest;
 use App\Lead;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class LeadController extends Controller
 {
@@ -14,27 +16,28 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->query('per_page');
-        $search = $request->query('search');
-        $source = $request->query('source');
-        $company = $request->query('company');
-        $branch = $request->query('branch');
-        $type = $request->query('type');
+        // $perPage = $request->query('per_page');
+        // $search = $request->query('search');
+        // $source = $request->query('source');
+        // $company = $request->query('company');
+        // $branch = $request->query('branch');
+        // $type = $request->query('type');
+        // $start
 
 
 
-        $query =  company()->products()->with('images')->latest();
-        if ($type) $query = $query->where('type', $type);
-        if ($search) $query = $query->where(function ($query) use ($search) {
-            $query->where('name', 'like', '%' . $search . '%')
-                ->orWhere('code', 'like', '%' . $search . '%')
-                ->orWhere('barcode', 'like', '%' . $search . '%')
-                ->orWhere('brand', 'like', '%' . $search . '%')
-                ->orWhere('manufacturer', 'like', '%' . $search . '%');
-        });
-        if ($name) $query = $query->where('name', 'like', '%' . $name . '%');
-        $query = $perPage ? $query->paginate($perPage) : $query->get();
-        return ProductsResource::collection($query);
+        // $query =  company()->products()->with('images')->latest();
+        // if ($type) $query = $query->where('type', $type);
+        // if ($search) $query = $query->where(function ($query) use ($search) {
+        //     $query->where('name', 'like', '%' . $search . '%')
+        //         ->orWhere('code', 'like', '%' . $search . '%')
+        //         ->orWhere('barcode', 'like', '%' . $search . '%')
+        //         ->orWhere('brand', 'like', '%' . $search . '%')
+        //         ->orWhere('manufacturer', 'like', '%' . $search . '%');
+        // });
+        // if ($name) $query = $query->where('name', 'like', '%' . $name . '%');
+        // $query = $perPage ? $query->paginate($perPage) : $query->get();
+        // return ProductsResource::collection($query);
     }
 
     /**
@@ -43,8 +46,13 @@ class LeadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    { }
+    public function store(LeadRequest $request)
+    {
+        $data = $request->all();
+        $data = Arr::add($data, 'company_id', company()->id);
+        $lead = user()->leads()->create($data);
+        return created($lead);
+    }
 
     /**
      * Display the specified resource.
@@ -62,9 +70,10 @@ class LeadController extends Controller
      * @param  \App\Lead  $lead
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Lead $lead)
+    public function update(LeadRequest $request, Lead $lead)
     {
-        //
+        $lead->update($request->all());
+        return updated();
     }
 
     /**

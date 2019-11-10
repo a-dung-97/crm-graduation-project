@@ -1,7 +1,11 @@
 <?php
 function company()
 {
-    return auth()->user()->company;
+    return user()->company;
+}
+function user()
+{
+    return auth()->user();
 }
 function created($model = null)
 {

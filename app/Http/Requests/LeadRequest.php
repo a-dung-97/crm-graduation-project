@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CatalogRequest extends FormRequest
+class LeadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,7 @@ class CatalogRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'parent_id' => 'required'
-        ];
-    }
-    public function messages()
-    {
-        return [
-            // 'name.required'=>'Tên danh mục đã tồn tại'
+            'last_name' => 'required'
         ];
     }
 }
