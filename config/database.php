@@ -35,16 +35,16 @@ return [
     */
 
     'connections' => [
-        'aws' => [
-            'driver' => 'mysql',
-            'host' => 'adcrm.c9hjykfym2ea.us-east-1.rds.amazonaws.com',
-            'database' => 'crm',
-            'username' => 'dungnknd97',
-            'password' => '12345678',
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-        ],
+        // 'aws' => [
+        //     'driver' => 'mysql',
+        //     'host' => 'adcrm.c9hjykfym2ea.us-east-1.rds.amazonaws.com',
+        //     'database' => 'crm',
+        //     'username' => 'dungnknd97',
+        //     'password' => '12345678',
+        //     'charset' => 'utf8mb4',
+        //     'collation' => 'utf8mb4_unicode_ci',
+        //     'prefix' => '',
+        // ],
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
