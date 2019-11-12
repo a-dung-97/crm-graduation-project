@@ -93,11 +93,11 @@ class UserController extends Controller
     {
         $oldAvatar = $this->user->avatar;
         if ($oldAvatar) {
-            Storage::delete('avatars/' . $oldAvatar);
+            Storage::delete('avatar/', $oldAvatar);
         }
         if ($request->avatar) {
             $image = $request->avatar;
-            $name = time() . '.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
+            $name = time() . uniqid() . '.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
 
             Storage::put('avatars/' . $name, \Image::make($image)->stream());
             $this->user->update(['avatar' => $name]);

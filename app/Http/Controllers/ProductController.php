@@ -77,7 +77,7 @@ class ProductController extends Controller
     private function addImagesToProduct($images, $product)
     {
         foreach ($images as $image) {
-            $name = time() . '.' . explode('/', explode(':', substr($image['path'], 0, strpos($image['path'], ';')))[1])[1];
+            $name = time() . uniqid() . '.' . explode('/', explode(':', substr($image['path'], 0, strpos($image['path'], ';')))[1])[1];
             Storage::put('products/' . $name, \Image::make($image['path'])->stream());
             $product->images()->create(['name' => $name, 'default' => $image['default']]);
         }
@@ -116,7 +116,7 @@ class ProductController extends Controller
         $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '_' . time() . '.' . $file->getClientOriginalExtension();
         $fileSize = $file->getSize();
         $file->storeAs(
-            'upload',
+            'files',
             $fileName
         );
         return collect(['name' => $fileName, 'size' => $fileSize]);

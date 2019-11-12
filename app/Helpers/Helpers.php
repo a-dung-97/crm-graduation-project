@@ -1,4 +1,7 @@
 <?php
+
+use Illuminate\Support\Facades\Storage;
+
 function company()
 {
     return user()->company;
@@ -36,4 +39,13 @@ function getValidProducts($data)
         $products[$key] = Arr::except($products[$key], ['name', "code"]);
     }
     return $products;
+}
+
+
+//google
+function deleteFile($dir, $name)
+{
+    $url = Storage::url($dir . '/' . $name);
+    $path = substr(substr($url, 31), 0, -13);
+    Storage::delete($path);
 }

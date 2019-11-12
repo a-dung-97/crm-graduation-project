@@ -89,7 +89,7 @@ class AuthController extends Controller
             "id" => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'avatar' => Storage::url('avatars/' . $user->avatar),
+            'avatar' => $user->avatar ?  Storage::url('avatars/' . $user->avatar) : null,
             'phone_number' => $user->phone_number,
             'roles' => $user->role_id ?  [$user->role->code] : [],
             'company' => $user->company_id ? $user->company->name : null,
