@@ -6,10 +6,13 @@ use App\Http\Requests\FileRequest;
 use App\Http\Requests\NoteRequest;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\FIleResouce;
+use App\Http\Resources\FIleResource;
 use App\Http\Resources\NoteResource;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductsResource;
 use App\Product;
+use App\Services\RelatedInformation;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
@@ -64,7 +67,7 @@ class ProductController extends Controller
 
     public function getFiles(Product $product, Request $request)
     {
-        return FIleResouce::collection($product->files()->paginate($request->query('per_page', 5)));
+        return FIleResource::collection($product->files()->paginate($request->query('per_page', 5)));
     }
 
     public function update(ProductRequest $request, Product $product)
@@ -100,35 +103,14 @@ class ProductController extends Controller
 
     public function addFileToProduct(FileRequest $request, Product $product)
     {
-        $file = $this->handleUpload($request->file);
-        $product->files()->create([
-            'name' => $file['name'],
-            'size' => $file['size'],
-            'description' => $request->description,
-            'user_id' => auth()->user()->id,
-            'company_id' => company()->id,
-        ]);
-        return ['message' => 'added'];
+        return RelatedInformation::addFile($request, $product);
     }
 
-    private function handleUpload($file)
-    {
-        $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '_' . time() . uniqid() . '.' . $file->getClientOriginalExtension();
-        $fileSize = $file->getSize();
-        $file->storeAs(
-            'files',
-            $fileName
-        );
-        return collect(['name' => $fileName, 'size' => $fileSize]);
-    }
+
 
     public function addNoteToProduct(NoteRequest $request, Product $product)
     {
-        $request = $request->all();
-        $request['user_id'] = auth()->user()->id;
-        $request['company_id'] = company()->id;
-        $product->notes()->create($request);
-        return response(['message' => "added"]);
+        return RelatedInformation::addNote($request, $product);
     }
 
     public function destroy(Product $product)

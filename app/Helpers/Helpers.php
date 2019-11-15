@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Storage;
+use App\Lead;
+use App\Product;
 
 function company()
 {
@@ -41,11 +42,17 @@ function getValidProducts($data)
     return $products;
 }
 
-
-//google
-function deleteFile($dir, $name)
+function getModel($type, $id)
 {
-    $url = Storage::url($dir . '/' . $name);
-    $path = substr(substr($url, 31), 0, -13);
-    Storage::delete($path);
+    switch ($type) {
+        case 'product':
+            $model = Product::find($id);
+            break;
+        case 'lead':
+            $model = Lead::find($id);
+            break;
+        default:
+            break;
+    }
+    return $model;
 }

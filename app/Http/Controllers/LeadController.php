@@ -61,7 +61,9 @@ class LeadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Lead $lead)
-    { }
+    {
+        return ['data' => $lead];
+    }
 
     /**
      * Update the specified resource in storage.

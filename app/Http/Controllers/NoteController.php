@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\NoteRequest;
 use App\Http\Resources\NoteResource;
+use App\Lead;
 use App\Note;
+use App\Product;
+use App\Services\RelatedInformation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 
 class NoteController extends Controller
 {
@@ -41,5 +45,18 @@ class NoteController extends Controller
     {
         $note->delete();
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+    public function addNote(Request $request, $type, $id)
+    {
+
+        $request = Arr::except($request->all(), ['type', 'id']);
+        $request['user_id'] = auth()->user()->id;
+        $request['company_id'] = company()->id;
+        getModel($type, $id)->notes()->create($request);
+        return response(['message' => "added"]);
+    }
+    public function getNotes(Request $request, $type, $id)
+    {
+        return NoteResource::collection(getModel($type, $id)->notes()->paginate($request->query('per_page', 5)));
     }
 }

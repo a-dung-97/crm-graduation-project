@@ -23,8 +23,16 @@ class Lead extends Model
     {
         return $this->belongsTo('App\Company');
     }
-    public function ownerable()
+    public function notes()
     {
-        return $this->morphTo();
+        return $this->morphMany('App\Note', 'noteable');
+    }
+    public function files()
+    {
+        return $this->morphMany('App\File', 'fileable');
+    }
+    public function tags()
+    {
+        return $this->morphToMany('App\Tag', 'taggable');
     }
 }

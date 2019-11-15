@@ -47,10 +47,22 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::apiResource('products', 'ProductController');
 
-    Route::apiResource('notes', 'NoteController');
+    Route::post('notes/{type}/{id}', 'NoteController@addNote');
+    Route::get('notes/{type}/{id}', 'NoteController@getNotes');
+    Route::apiResource('notes', 'NoteController', ['except' => ['show', 'store']]);
 
     Route::post('files/download', 'FileController@download');
+    Route::post('files/{type}/{id}', 'FileController@addFiles');
+    Route::get('files/{type}/{id}', 'FileController@getFiles');
     Route::apiResource('files', 'FileController', ['only' => ['destroy']]);
+
+    Route::get('tags', 'TagController@index');
+    Route::put('tags/{type}/{id}', 'TagController@changeTags');
+    Route::get('tags/{type}/{id}', 'TagController@getTags');
+    Route::delete('tags/{type}/{id}', 'TagController@deleteTag');
+
+
+
     Route::apiResource('receipts', 'ReceiptController');
     Route::apiResource('issues', 'IssueController');
     Route::apiResource('warehouses', 'WarehouseController');
@@ -60,4 +72,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('catalogs', 'CatalogController', ['except' => 'show']);
 
     Route::apiResource('leads', 'LeadController');
+
+
+    Route::post('tracking', 'MailController@tracking');
 });

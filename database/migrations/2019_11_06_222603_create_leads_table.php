@@ -20,7 +20,7 @@ class CreateLeadsTable extends Migration
             $table->string('honorific')->nullable();
             $table->date('birdthday')->nullable();
             $table->string('email')->nullable();
-            $table->string('phone')->nullable();
+            $table->string('phone_number')->nullable();
             $table->string('facebook')->nullable();
             $table->unsignedInteger('status_id')->nullable();
             $table->foreign('status_id')->references('id')->on('catalogs');
