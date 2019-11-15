@@ -31,6 +31,6 @@ class InvitationEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Lời mời tham gia ADCRM')->view('mail.invitation')->with(['name' => $this->name, 'code' => $this->code]);
+        return $this->subject('Lời mời tham gia ADCRM')->from('noreply@crm.adung.software', 'Anh Dũng')->view('mail.invitation')->with(['name' => $this->name, 'code' => $this->code]);
     }
 }

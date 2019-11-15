@@ -13,6 +13,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -53,7 +54,8 @@ class UserController extends Controller
         $data['invite_code'] = Str::random(60);
         $data['expired_at'] = Carbon::now()->addDay()->toDateTimeString();
         $this->user->invitations()->create($data);
-        Mail::to($request->email)->send(new InvitationEmail($this->user->name,  $data['invite_code']));
+
+        Mail::to($request->email)->queue(new InvitationEmail($this->user->name,  $data['invite_code']));
         return ['message' => 'Gửi lời mời thành công'];
     }
     public function comfirmInvitationEmail($inviteCode)
