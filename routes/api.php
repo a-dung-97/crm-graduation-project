@@ -72,7 +72,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('catalogs', 'CatalogController', ['except' => 'show']);
 
     Route::apiResource('leads', 'LeadController');
-
-
-    Route::post('tracking', 'MailController@tracking');
 });
+Route::post('tracking', 'MailController@tracking');
