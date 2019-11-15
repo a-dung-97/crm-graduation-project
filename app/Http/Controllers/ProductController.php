@@ -113,7 +113,7 @@ class ProductController extends Controller
 
     private function handleUpload($file)
     {
-        $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '_' . time() . '.' . $file->getClientOriginalExtension();
+        $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '_' . time() . uniqid() . '.' . $file->getClientOriginalExtension();
         $fileSize = $file->getSize();
         $file->storeAs(
             'files',
