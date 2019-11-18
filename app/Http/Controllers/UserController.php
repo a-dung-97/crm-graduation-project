@@ -26,7 +26,7 @@ class UserController extends Controller
     }
     public function index(Request $request)
     {
-        $perPage = $request->query('per_page');
+        $perPage = $request->query('perPage');
         $search = $request->query('search');
         $query =  company()->users()->latest();
 

@@ -27,7 +27,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->query('per_page');
+        $perPage = $request->query('perPage');
         $search = $request->query('search');
         $name = $request->query('name');
         $type = $request->query('type');
@@ -62,12 +62,12 @@ class ProductController extends Controller
 
     public function getNotes(Product $product, Request $request)
     {
-        return NoteResource::collection($product->notes()->paginate($request->query('per_page', 5)));
+        return NoteResource::collection($product->notes()->paginate($request->query('perPage', 5)));
     }
 
     public function getFiles(Product $product, Request $request)
     {
-        return FIleResource::collection($product->files()->paginate($request->query('per_page', 5)));
+        return FIleResource::collection($product->files()->paginate($request->query('perPage', 5)));
     }
 
     public function update(ProductRequest $request, Product $product)

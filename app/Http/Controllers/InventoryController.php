@@ -10,7 +10,7 @@ class InventoryController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->query('per_page', 5);
+        $perPage = $request->query('perPage', 5);
         $warehouse = $request->query('warehouse');
         $search = $request->query('search');
         $query = company()->inventories()->latest('id');

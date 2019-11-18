@@ -17,7 +17,7 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->query('per_page');
+        $perPage = $request->query('perPage');
         $search = $request->query('search');
         $query =  company()->departments()->latest('id')->with('parent');
         if ($search) $query = $query->where('name', 'like', '%' . $search . '%')->orWhere('description', 'like', '%' . $search . '%');

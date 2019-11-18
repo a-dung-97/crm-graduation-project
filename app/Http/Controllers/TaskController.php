@@ -20,7 +20,7 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->query('per_page', 5);
+        $perPage = $request->query('perPage', 5);
         $status = $request->query('status');
         $title = $request->query('title');
         $user = $request->query('user');
@@ -106,6 +106,6 @@ class TaskController extends Controller
     }
     public function getTasks(Request $request, $type, $id)
     {
-        return TaskInDetailResource::collection(getModel($type, $id)->tasks()->with('user:id,name')->paginate($request->query('per_page', 5)));
+        return TaskInDetailResource::collection(getModel($type, $id)->tasks()->with('user:id,name')->paginate($request->query('perPage', 5)));
     }
 }

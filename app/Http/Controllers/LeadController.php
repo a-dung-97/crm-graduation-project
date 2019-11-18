@@ -16,7 +16,7 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
-        // $perPage = $request->query('per_page');
+        // $perPage = $request->query('perPage');
         // $search = $request->query('search');
         // $source = $request->query('source');
         // $company = $request->query('company');

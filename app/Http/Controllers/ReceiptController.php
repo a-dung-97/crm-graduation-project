@@ -19,7 +19,7 @@ class ReceiptController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->query('per_page');
+        $perPage = $request->query('perPage');
         $search = $request->query('search');
         $query =  Receipt::latest('date');
         if ($search) $query = $query->where('code', 'like', '%' . $search . '%')->orWhere('description', 'like', '%' . $search . '%');

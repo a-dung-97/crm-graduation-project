@@ -27,6 +27,6 @@ class FileController extends Controller
     }
     public function getFiles(Request $request, $type, $id)
     {
-        return FileResource::collection(getModel($type, $id)->files()->paginate($request->query('per_page', 5)));
+        return FileResource::collection(getModel($type, $id)->files()->paginate($request->query('perPage', 5)));
     }
 }

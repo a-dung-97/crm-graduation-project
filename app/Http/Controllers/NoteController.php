@@ -17,7 +17,7 @@ class NoteController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->query('per_page');
+        $perPage = $request->query('perPage');
         $search = $request->query('search');
         $type = $request->query('type');
         $user = $request->query('user');
@@ -55,6 +55,6 @@ class NoteController extends Controller
     }
     public function getNotes(Request $request, $type, $id)
     {
-        return NoteResource::collection(getModel($type, $id)->notes()->paginate($request->query('per_page', 5)));
+        return NoteResource::collection(getModel($type, $id)->notes()->paginate($request->query('perPage', 5)));
     }
 }
