@@ -42,7 +42,7 @@ class AuthController extends Controller
         $user = User::create($info);
 
         if ($user) {
-            Mail::to($user)->send(new VerifyEmail($user->email_token));
+            Mail::to($user)->queue(new VerifyEmail($user->email_token));
         }
         return response(['data' => ['user_id' => $user->id]], Response::HTTP_CREATED);
     }
@@ -136,9 +136,10 @@ class AuthController extends Controller
     public function setup(CompanyRequest $request)
     {
         $company = Company::create($request->all());
+        $firstDepartment = $company->departments()->create(['name' => 'Công ty', 'description' => 'Công ty']);
         $firstPosition = $company->positions()->create(['name' => 'CEO']);
         $firstRole = $company->roles()->create(['name' => 'Full', 'code' => 'full']);
-        auth()->user()->update(['company_id' => $company->id, 'position_id' => $firstPosition->id, 'role_id' => $firstRole->id]);
+        auth()->user()->update(['company_id' => $company->id, 'position_id' => $firstPosition->id, 'role_id' => $firstRole->id, 'department_id' => $firstDepartment->id]);
         return response('created', Response::HTTP_CREATED);
     }
 }

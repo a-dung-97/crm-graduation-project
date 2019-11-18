@@ -14,13 +14,13 @@ class CreateLeadScoreRulesTable extends Migration
     public function up()
     {
         Schema::create('lead_score_rules', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('rule');
             $table->string('condition');
             $table->string('value')->nullable();
             $table->boolean('action');
             $table->integer('score');
-            $table->unsignedInteger('company_id');
+            $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
         });

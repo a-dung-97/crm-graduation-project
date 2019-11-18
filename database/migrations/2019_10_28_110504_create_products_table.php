@@ -14,7 +14,7 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->enum('type', ['product', 'service'])->default('product');
             $table->string('name');
             $table->string('code');
@@ -28,7 +28,7 @@ class CreateProductsTable extends Migration
             $table->decimal('sale_price', 15, 2)->default(0);
             $table->string('distributor')->nullable();
             $table->text('sale_detail')->nullable();
-            $table->unsignedInteger('company_id');
+            $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
         });

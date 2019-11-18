@@ -12,6 +12,8 @@
 |
 */
 
+use Illuminate\Http\Request;
+
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
     Route::post('register', 'AuthController@register');
@@ -72,5 +74,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('catalogs', 'CatalogController', ['except' => 'show']);
 
     Route::apiResource('leads', 'LeadController');
+
+    Route::apiResource('tasks', 'TaskController');
 });
 Route::post('tracking', 'MailController@tracking');
+
+Route::get('test', function (Request $request) {
+    return $request->query('date');
+});

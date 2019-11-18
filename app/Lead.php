@@ -35,4 +35,8 @@ class Lead extends Model
     {
         return $this->morphToMany('App\Tag', 'taggable');
     }
+    public function tasks()
+    {
+        return $this->morphMany('App\Task', 'taskable');
+    }
 }

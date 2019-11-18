@@ -15,26 +15,8 @@ class Note extends Model
     {
         return $this->belongsTo('App\User');
     }
-    public function getNoteableTypeAttribute($value)
-    {
-        switch ($value) {
-            case 'App\Product':
-                return 'Sản phẩm';
-                break;
-            case 'App\Customer':
-                return 'Khách hàng';
-                break;
-            case 'App\Lead':
-                return 'Tiềm năng';
-                break;
-            case 'App\Contact':
-                return 'Liên hệ';
-                break;
-            case 'App\Opportunity':
-                return 'Cơ hội';
-                break;
-            default:
-                break;
-        }
-    }
+    // public function getNoteableTypeAttribute($value)
+    // {
+    //     return convertModelToType($value);
+    // }
 }

@@ -14,7 +14,7 @@ class CreateIssuesTable extends Migration
     public function up()
     {
         Schema::create('issues', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('code');
             $table->date('date');
             $table->string('delivery_man')->nullable();
@@ -23,7 +23,7 @@ class CreateIssuesTable extends Migration
             $table->string('recipient')->nullable();
             $table->string('phone_number');
             $table->boolean('confirmed')->default(false);
-            $table->unsignedInteger('company_id');
+            $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
         });
     }

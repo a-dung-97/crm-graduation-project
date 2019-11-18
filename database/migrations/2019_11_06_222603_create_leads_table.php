@@ -14,7 +14,7 @@ class CreateLeadsTable extends Migration
     public function up()
     {
         Schema::create('leads', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('first_name')->nullable();
             $table->string('last_name');
             $table->string('honorific')->nullable();
@@ -22,9 +22,9 @@ class CreateLeadsTable extends Migration
             $table->string('email')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('facebook')->nullable();
-            $table->unsignedInteger('status_id')->nullable();
+            $table->unsignedBigInteger('status_id')->nullable();
             $table->foreign('status_id')->references('id')->on('catalogs');
-            $table->unsignedInteger('source_id')->nullable();
+            $table->unsignedBigInteger('source_id')->nullable();
             $table->foreign('source_id')->references('id')->on('catalogs');
 
 
@@ -35,8 +35,8 @@ class CreateLeadsTable extends Migration
             $table->string('tax_code')->nullable();
             $table->string('fax')->nullable();
             $table->integer('number_of_workers')->nullable();
-            $table->decimal('revenue')->nullable();
-            $table->unsignedInteger('branch_id')->nullable();
+            $table->decimal('revenue', 15, 2)->nullable();
+            $table->unsignedBigInteger('branch_id')->nullable();
             $table->foreign('branch_id')->references('id')->on('catalogs');
             $table->string('office_address')->nullable();
 
@@ -44,9 +44,9 @@ class CreateLeadsTable extends Migration
             $table->integer('score')->default(0);
             // $table->morphs('ownerable');
 
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedInteger('company_id');
+            $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
         });

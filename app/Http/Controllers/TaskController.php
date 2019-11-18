@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TaskRequest;
+use App\Http\Resources\TaskResource;
+use App\Http\Resources\TasksResource;
 use App\Task;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class TaskController extends Controller
 {
@@ -12,19 +17,24 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
+        $perPage = $request->query('per_page', 5);
+        $status = $request->query('status');
+        $title = $request->query('title');
+        $user = $request->query('user');
+        $startDate = $request->query('startDate');
+        $finishDate = $request->query('finishDate');
+        $query = company()->tasks();
+        $query = $query->where(function ($query) use ($status, $title, $user, $startDate, $finishDate) {
+            if ($title) $query = $query->where('title', 'like', '%' . $title . '%');
+            if ($status) $query = $query->where('status', $status);
+            if ($user) $query = $query->where('user_id', $user);
+            if ($startDate) $query = $query->whereBetween('start_date', $startDate);
+            if ($finishDate) $query = $query->whereBetween('finish_date', $finishDate);
+        });
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return TasksResource::collection($query->with('taskable:id,first_name,last_name', 'user:id,name')->paginate($perPage));
     }
 
     /**
@@ -33,9 +43,14 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
-        //
+        $task = $request->all();
+        $task['created_by'] = user()->id;
+        $task['taskable_type'] = $request->taskable_type;
+        $task['taskable_id'] = $request->taskable_id;
+        company()->tasks()->create($task);
+        return created();
     }
 
     /**
@@ -44,20 +59,10 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function show(Task $task)
+    public function show(Request $request, Task $task)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Task $task)
-    {
-        //
+        if ($request->query('edit')) return ['data' => $task];
+        return new TaskResource($task);
     }
 
     /**
@@ -67,9 +72,16 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task)
+    public function update(TaskRequest $request, Task $task)
     {
-        //
+        if ($task->status == 4) {
+            return response(['message' => 'Công việc này đã hoàn thành'], 400);
+        };
+        $data = $request->all();
+        $data['updated_by'] = user()->id;
+        if ($request->status == 4) $data['finish_date'] = Carbon::now()->toDateString();
+        $task->update($data);
+        return updated();
     }
 
     /**
@@ -80,6 +92,6 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        delete($task);
     }
 }

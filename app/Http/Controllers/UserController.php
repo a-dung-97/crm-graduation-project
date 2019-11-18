@@ -48,7 +48,7 @@ class UserController extends Controller
     public function inviteUser(InvitationRequest $request)
     {
 
-        if (User::where('email', $request->email)->whereNotNull('company_id')->first())
+        if (User::where('email', $request->email)->whereNotNull('company_id')->where('active', true)->first())
             return response(['message' => 'Email này đã tồn tại ở công ty khác'], 400);
         $data = $request->all();
         $data['invite_code'] = Str::random(60);

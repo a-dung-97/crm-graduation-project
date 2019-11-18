@@ -14,19 +14,29 @@ class CreateTasksTable extends Migration
     public function up()
     {
         Schema::create('tasks', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('title');
             $table->date('start_date');
-            $table->date('end_date')->nullable();
-            $table->string('priority');
-            $table->unsignedInteger('status_id');
-            $table->foreign('status_id')->references('id')->on('catalogs');
-            $table->text('description');
-            $table->unsignedInteger('user_id');
+            $table->date('expiration_date')->nullable();
+            $table->date('finish_date')->nullable();
+            $table->enum('priority', ['1', '2', '3', '4', '5'])->nullable();
+            $table->enum('status', ['1', '2', '3', '4'])->nullable();
+            $table->text('description')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->morphs('taskable');
-            $table->unsignedInteger('company_id');
+            $table->nullableMorphs('taskable');
+            $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
+
+            $table->unsignedBigInteger('created_by');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->foreign('updated_by')->references('id')->on('users');
+
+            $table->date('reminder_date')->nullable();
+            $table->enum('reminder_type', ['1', '2', '3'])->nullable();
+
+            $table->timestamps();
         });
     }
 

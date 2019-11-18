@@ -56,3 +56,48 @@ function getModel($type, $id)
     }
     return $model;
 }
+
+function convertModelToType($value)
+{
+    switch ($value) {
+        case 'App\Product':
+            return 'Sản phẩm';
+            break;
+        case 'App\Customer':
+            return 'Khách hàng';
+            break;
+        case 'App\Lead':
+            return 'Tiềm năng';
+            break;
+        case 'App\Contact':
+            return 'Liên hệ';
+            break;
+        case 'App\Opportunity':
+            return 'Cơ hội';
+            break;
+        default:
+            break;
+    }
+}
+function convertTypeToModel($value)
+{
+    switch ($value) {
+        case 'App\Product':
+            return 'Sản phẩm';
+            break;
+        case 'App\Customer':
+            return 'Khách hàng';
+            break;
+        case 'App\Lead':
+            return 'Tiềm năng';
+            break;
+        case 'App\Contact':
+            return 'Liên hệ';
+            break;
+        case 'App\Opportunity':
+            return 'Cơ hội';
+            break;
+        default:
+            break;
+    }
+}
