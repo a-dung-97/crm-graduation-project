@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LeadRequest;
+use App\Http\Resources\ListLeadResource;
 use App\Lead;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -16,7 +17,14 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
-        // $perPage = $request->query('perPage');
+        $perPage = $request->query('perPage', 5);
+        $query = company()->leads();
+        if ($request->query('list')) {
+            $name = $request->query('name');
+            $query = $query->select('id', 'full_name', 'email', 'phone_number');
+            if ($request->query('name')) $query = $query->where('full_name', 'like', '%' . $name . '%');
+            return  ListLeadResource::collection($query->paginate($perPage));
+        }
         // $search = $request->query('search');
         // $source = $request->query('source');
         // $company = $request->query('company');
@@ -49,7 +57,7 @@ class LeadController extends Controller
     public function store(LeadRequest $request)
     {
         $data = $request->all();
-        $data = Arr::add($data, 'company_id', company()->id);
+        $data = array_merge($data, ['company_id' => company()->id, 'full_name' => $request->first_name . ' ' . $request->last_name]);
         $lead = user()->leads()->create($data);
         return created($lead);
     }

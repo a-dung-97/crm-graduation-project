@@ -33,7 +33,7 @@ class CreateTasksTable extends Migration
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->foreign('updated_by')->references('id')->on('users');
 
-            $table->date('reminder_date')->nullable();
+            $table->dateTime('reminder_time')->nullable();
             $table->enum('reminder_type', ['1', '2', '3'])->nullable();
 
             $table->timestamps();

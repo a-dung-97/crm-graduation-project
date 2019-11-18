@@ -75,6 +75,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::apiResource('leads', 'LeadController');
 
+    Route::put('tasks/{task}/finish', 'TaskController@finishTask');
+    Route::apiResource('tasks', 'TaskController');
     Route::apiResource('tasks', 'TaskController');
     Route::post('tasks/{type}/{id}', 'TaskController@addTask');
     Route::get('tasks/{type}/{id}', 'TaskController@getTasks');

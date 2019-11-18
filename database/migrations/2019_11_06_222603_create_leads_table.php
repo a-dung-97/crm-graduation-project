@@ -17,6 +17,7 @@ class CreateLeadsTable extends Migration
             $table->bigIncrements('id');
             $table->string('first_name')->nullable();
             $table->string('last_name');
+            $table->string('full_name');
             $table->string('honorific')->nullable();
             $table->date('birdthday')->nullable();
             $table->string('email')->nullable();

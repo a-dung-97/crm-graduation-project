@@ -32,9 +32,12 @@ class UserController extends Controller
 
         if ($search) $query = $query->where('name', 'like', '%' . $search . '%')
             ->orWhere('email', 'like', '%' . $search . '%')
-            ->orWhere('phone_number', 'like', '%' . $search . '%');;
-        $query = $perPage ? $query->paginate($perPage) : $query->get();
-        return UserResource::collection($query);
+            ->orWhere('phone_number', 'like', '%' . $search . '%');
+        if ($perPage) {
+            $query = $query->paginate($perPage);
+            return UserResource::collection($query);
+        }
+        return ['data' => $query->select('id', 'name', 'email')->get()];
     }
     public function update(Request $request, User $user)
     {

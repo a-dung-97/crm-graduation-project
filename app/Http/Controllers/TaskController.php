@@ -22,14 +22,16 @@ class TaskController extends Controller
     {
         $perPage = $request->query('perPage', 5);
         $status = $request->query('status');
+        $type = $request->query('type');
         $title = $request->query('title');
         $user = $request->query('user');
         $startDate = $request->query('startDate');
         $finishDate = $request->query('finishDate');
         $query = company()->tasks();
-        $query = $query->where(function ($query) use ($status, $title, $user, $startDate, $finishDate) {
+        $query = $query->where(function ($query) use ($status, $title, $user, $startDate, $finishDate, $type) {
             if ($title) $query = $query->where('title', 'like', '%' . $title . '%');
             if ($status) $query = $query->where('status', $status);
+            if ($type) $query = $query->where('taskable_type', $type);
             if ($user) $query = $query->where('user_id', $user);
             if ($startDate) $query = $query->whereBetween('start_date', $startDate);
             if ($finishDate) $query = $query->whereBetween('finish_date', $finishDate);
@@ -46,12 +48,12 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
-        $task = $request->all();
-        $task['created_by'] = user()->id;
-        $task['taskable_type'] = $request->taskable_type;
-        $task['taskable_id'] = $request->taskable_id;
-        company()->tasks()->create($task);
-        return created();
+        $data = $request->all();
+        $data['created_by'] = user()->id;
+        $data['taskable_type'] = $request->taskable_type;
+        $data['taskable_id'] = $request->taskable_id;
+        $task = company()->tasks()->create($data);
+        return created($task);
     }
 
     /**
@@ -62,7 +64,10 @@ class TaskController extends Controller
      */
     public function show(Request $request, Task $task)
     {
-        if ($request->query('edit')) return ['data' => $task];
+        if ($request->query('edit')) {
+            $task = collect($task)->merge(['taskable' => $task->taskable->full_name]);
+            return ['data' => $task];
+        }
         return new TaskResource($task);
     }
 
@@ -107,5 +112,11 @@ class TaskController extends Controller
     public function getTasks(Request $request, $type, $id)
     {
         return TaskInDetailResource::collection(getModel($type, $id)->tasks()->with('user:id,name')->paginate($request->query('perPage', 5)));
+    }
+
+    public function finishTask(Task $task)
+    {
+        $task->update(['status' => 4, 'updated_by' => user()->id, 'finish_date' => Carbon::now()->toDateString()]);
+        return updated();
     }
 }

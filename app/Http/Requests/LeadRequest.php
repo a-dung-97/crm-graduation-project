@@ -24,7 +24,17 @@ class LeadRequest extends FormRequest
     public function rules()
     {
         return [
-            'last_name' => 'required'
+            'last_name' => 'required',
+            'email' => 'unique:leads,email,' . $this->id . ',id',
+            'phone_number' => 'unique:leads,phone_number,' . $this->id . ',id'
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'email.unique' => 'Địa chỉ email đã tồn tại',
+            'phone_number.unique' => 'Số điện thoại đã tồn tại'
+
         ];
     }
 }
