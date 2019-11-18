@@ -76,6 +76,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('leads', 'LeadController');
 
     Route::apiResource('tasks', 'TaskController');
+    Route::post('tasks/{type}/{id}', 'TaskController@addTask');
+    Route::get('tasks/{type}/{id}', 'TaskController@getTasks');
 });
 Route::post('tracking', 'MailController@tracking');
 

@@ -22,12 +22,10 @@ class NoteController extends Controller
         $type = $request->query('type');
         $user = $request->query('user');
         $query =  company()->notes()->latest();
-        $startDate = $request->query('start');
-        $endDate = $request->query('end');
+        $date = $request->query('date');
         if ($user) $query = $query->where('user_id', $user);
         if ($type) $query = $query->where('noteable_type', $type);
-        if ($startDate) $query = $query->whereDate('created_at', '>=', Carbon::parse($startDate)->toDateString());
-        if ($endDate) $query = $query->whereDate('created_at', '<=', Carbon::parse($endDate)->toDateString());
+        if ($date) $query = $query->whereBetween('created_at', $date);
         if ($search) $query = $query->where(function ($query) use ($search) {
             $query->where('title', 'like', '%' . $search . '%')
                 ->orWhere('content', 'like', '%' . $search . '%');

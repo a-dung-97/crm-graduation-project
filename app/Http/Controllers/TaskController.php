@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
+use App\Http\Resources\TaskInDetailResource;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\TasksResource;
 use App\Task;
@@ -93,5 +94,18 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         delete($task);
+    }
+
+    public function addTask(TaskRequest $request, $type, $id)
+    {
+        $request = $request->all();
+        $request['company_id'] = company()->id;
+        $request['created_by'] = user()->id;
+        getModel($type, $id)->tasks()->create($request);
+        return response(['message' => "added"]);
+    }
+    public function getTasks(Request $request, $type, $id)
+    {
+        return TaskInDetailResource::collection(getModel($type, $id)->tasks()->with('user:id,name')->paginate($request->query('per_page', 5)));
     }
 }
