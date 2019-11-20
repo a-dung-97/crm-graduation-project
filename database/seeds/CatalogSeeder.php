@@ -12,6 +12,34 @@ class CatalogSeeder extends Seeder
      */
     public function run()
     {
+        $customer = Catalog::create(['name' => 'Khách hàng']);
+        $customer->catalogs()->create(['name' => 'Loại'])->catalogs()->createMany([
+            ['name' => 'Khách hàng cá nhân', 'description' => 'Khách hàng cá nhân', 'company_id' => 1],
+            ['name' => 'Tổ chức', 'description' => 'Tổ chức', 'company_id' => 1],
+        ]);
+        $customer->catalogs()->create(['name' => 'Nguồn'])->catalogs()->createMany([
+            ['name' => 'Webform', 'description' => 'Webform', 'company_id' => 1],
+            ['name' => 'Facebook', 'description' => 'Facebook', 'company_id' => 1],
+            ['name' => 'Trò truyện', 'description' => 'Trò truyện', 'company_id' => 1],
+            ['name' => 'Tham chiếu web', 'description' => 'Tham chiếu web', 'company_id' => 1],
+            ['name' => 'Quan hệ đối ngoại', 'description' => 'Quan hệ đối ngoại', 'company_id' => 1],
+            ['name' => 'Đối tác', 'description' => 'Đối tác', 'company_id' => 1],
+            ['name' => 'Cửa hàng trực tuyến', 'description' => 'Cửa hàng trực tuyến', 'company_id' => 1],
+            ['name' => 'Tham chiếu từ bên ngoài', 'description' => 'Tham chiếu từ bên ngoài', 'company_id' => 1],
+            ['name' => 'Tham chiếu từ nhân viên', 'description' => 'Tham chiếu từ nhân viên', 'company_id' => 1],
+            ['name' => 'Gọi điện thoại', 'description' => 'Gọi điện thoại', 'company_id' => 1],
+            ['name' => 'Quảng cáo', 'description' => 'Quảng cáo', 'company_id' => 1],
+        ]);
+        $customer->catalogs()->create(['name' => 'Ngành nghề'])->catalogs()->createMany([
+            ['name' => 'CNTT', 'description' => 'Công nghệ thông tin', 'company_id' => 1],
+            ['name' => 'Giáo dục', 'description' => 'Giáo dục', 'company_id' => 1],
+            ['name' => 'Bất động sản', 'description' => 'Bất động sản', 'company_id' => 1],
+            ['name' => 'Bán lẻ', 'description' => 'Bán lẻ', 'company_id' => 1],
+        ]);
+
+
+
+
         $contact = Catalog::create(['name' => 'Liên hệ']);
         $contact->catalogs()->create(['name' => 'Chức vụ'])->catalogs()->createMany([
             ['name' => 'Cộng tác viên', 'description' => 'Cộng tác viên', 'company_id' => 1],

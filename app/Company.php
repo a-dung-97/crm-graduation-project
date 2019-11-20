@@ -72,4 +72,12 @@ class Company extends Model
     {
         return $this->hasMany('App\Lead');
     }
+    public function customers()
+    {
+        return $this->hasMany('App\Customer');
+    }
+    public function contacts()
+    {
+        return $this->hasMany('App\Contact');
+    }
 }

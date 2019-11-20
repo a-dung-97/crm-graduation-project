@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLeadsTable extends Migration
+class CreateCustomersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,25 +13,24 @@ class CreateLeadsTable extends Migration
      */
     public function up()
     {
-        Schema::create('leads', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('first_name')->nullable();
-            $table->string('last_name');
             $table->string('name');
-            $table->string('honorific')->nullable();
+            $table->string('code');
             $table->date('birthday')->nullable();
             $table->string('email')->nullable();
             $table->string('phone_number')->nullable();
-            $table->string('facebook')->nullable();
-            $table->unsignedBigInteger('status_id')->nullable();
-            $table->foreign('status_id')->references('id')->on('catalogs');
+            $table->string('mobile_number')->nullable();
+            $table->unsignedBigInteger('type_id')->nullable();
+            $table->foreign('type_id')->references('id')->on('catalogs');
             $table->unsignedBigInteger('source_id')->nullable();
             $table->foreign('source_id')->references('id')->on('catalogs');
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('customers')->onDelete('set null');
+            $table->integer('evaluate')->nullable();
 
 
 
-            //company
-            $table->string('company')->nullable();
             $table->string('website')->nullable();
             $table->string('tax_code')->nullable();
             $table->string('fax')->nullable();
@@ -40,13 +39,12 @@ class CreateLeadsTable extends Migration
             $table->unsignedBigInteger('branch_id')->nullable();
             $table->foreign('branch_id')->references('id')->on('catalogs');
             $table->string('office_address')->nullable();
-
             $table->text('description')->nullable();
-            $table->integer('score')->default(0);
-            // $table->morphs('ownerable');
+            $table->string('delivery_address')->nullable();
+            $table->string('invoice_address')->nullable();
 
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+
+            $table->morphs('ownerable');
             $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
@@ -60,6 +58,6 @@ class CreateLeadsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('leads');
+        Schema::dropIfExists('customers');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Group;
 use App\Http\Requests\CompanyRequest;
 use App\Http\Requests\InvitationRequest;
 use App\Http\Resources\UserResource;

@@ -4,13 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Lead extends Model
+class Contact extends Model
 {
-    protected $guarded  = [];
-    public function status()
-    {
-        return $this->belongsTo('App\Catalog', 'status_id');
-    }
+    protected $guarded = [];
     public function source()
     {
         return $this->belongsTo('App\Catalog', 'source_id');
@@ -39,8 +35,8 @@ class Lead extends Model
     {
         return $this->morphMany('App\Task', 'taskable');
     }
-    public function user()
+    public function ownerable()
     {
-        return $this->belongsTo('App\User');
+        return $this->morphTo();
     }
 }

@@ -12,4 +12,12 @@ class Group extends Model
     {
         return $this->belongsToMany('App\User');
     }
+    public function customers()
+    {
+        return $this->morphMany('App\Customer', 'ownerable');
+    }
+    public function contacts()
+    {
+        return $this->morphMany('App\Contacts', 'ownerable');
+    }
 }

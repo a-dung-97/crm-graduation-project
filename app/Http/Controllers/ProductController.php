@@ -62,12 +62,12 @@ class ProductController extends Controller
 
     public function getNotes(Product $product, Request $request)
     {
-        return NoteResource::collection($product->notes()->paginate($request->query('perPage', 5)));
+        return NoteResource::collection($product->notes()->paginate($request->query('perPage', 10)));
     }
 
     public function getFiles(Product $product, Request $request)
     {
-        return FIleResource::collection($product->files()->paginate($request->query('perPage', 5)));
+        return FIleResource::collection($product->files()->paginate($request->query('perPage', 10)));
     }
 
     public function update(ProductRequest $request, Product $product)

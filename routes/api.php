@@ -80,9 +80,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('tasks', 'TaskController');
     Route::post('tasks/{type}/{id}', 'TaskController@addTask');
     Route::get('tasks/{type}/{id}', 'TaskController@getTasks');
+
+    Route::apiResource('customers', 'CustomerController');
+    Route::apiResource('contacts', 'ContactController');
 });
 Route::post('tracking', 'MailController@tracking');
 
 Route::get('test', function (Request $request) {
-    return $request->query('date');
+    return ['data' => json_decode($request->query('options'))->type];
 });

@@ -55,6 +55,6 @@ class NoteController extends Controller
     }
     public function getNotes(Request $request, $type, $id)
     {
-        return NoteResource::collection(getModel($type, $id)->notes()->paginate($request->query('perPage', 5)));
+        return NoteResource::collection(getModel($type, $id)->notes()->paginate($request->query('perPage', 10)));
     }
 }

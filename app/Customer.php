@@ -4,16 +4,21 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Lead extends Model
+class Customer extends Model
 {
+
     protected $guarded  = [];
-    public function status()
-    {
-        return $this->belongsTo('App\Catalog', 'status_id');
-    }
     public function source()
     {
         return $this->belongsTo('App\Catalog', 'source_id');
+    }
+    public function type()
+    {
+        return $this->belongsTo('App\Catalog', 'type_id');
+    }
+    public function parent()
+    {
+        return $this->belongsTo('App\Customer', 'parent_id');
     }
     public function branch()
     {
@@ -39,8 +44,8 @@ class Lead extends Model
     {
         return $this->morphMany('App\Task', 'taskable');
     }
-    public function user()
+    public function ownerable()
     {
-        return $this->belongsTo('App\User');
+        return $this->morphTo();
     }
 }

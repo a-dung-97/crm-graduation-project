@@ -1,5 +1,7 @@
 <?php
 
+use App\Contact;
+use App\Customer;
 use App\Lead;
 use App\Product;
 
@@ -50,6 +52,12 @@ function getModel($type, $id)
             break;
         case 'lead':
             $model = Lead::find($id);
+            break;
+        case 'customer':
+            $model = Customer::find($id);
+            break;
+        case 'contact':
+            $model = Contact::find($id);
             break;
         default:
             break;

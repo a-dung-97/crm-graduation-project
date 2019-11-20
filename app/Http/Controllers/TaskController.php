@@ -20,7 +20,7 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->query('perPage', 5);
+        $perPage = $request->query('perPage', 10);
         $status = $request->query('status');
         $type = $request->query('type');
         $title = $request->query('title');
@@ -37,7 +37,7 @@ class TaskController extends Controller
             if ($finishDate) $query = $query->whereBetween('finish_date', $finishDate);
         });
 
-        return TasksResource::collection($query->with('taskable:id,first_name,last_name', 'user:id,name')->paginate($perPage));
+        return TasksResource::collection($query->with('taskable:id,name', 'user:id,name')->paginate($perPage));
     }
 
     /**
@@ -65,7 +65,7 @@ class TaskController extends Controller
     public function show(Request $request, Task $task)
     {
         if ($request->query('edit')) {
-            $task = collect($task)->merge(['taskable' => $task->taskable->full_name]);
+            $task = collect($task)->merge(['taskable' => $task->taskable->name]);
             return ['data' => $task];
         }
         return new TaskResource($task);
@@ -111,7 +111,7 @@ class TaskController extends Controller
     }
     public function getTasks(Request $request, $type, $id)
     {
-        return TaskInDetailResource::collection(getModel($type, $id)->tasks()->with('user:id,name')->paginate($request->query('perPage', 5)));
+        return TaskInDetailResource::collection(getModel($type, $id)->tasks()->with('user:id,name')->paginate($request->query('perPage', 10)));
     }
 
     public function finishTask(Task $task)

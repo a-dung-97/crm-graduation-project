@@ -17,10 +17,13 @@ class GroupController extends Controller
         $search = $request->query('search');
         $query =  company()->groups()->latest('id');
         if ($search) $query = $query->where('name', 'like', '%' . $search . '%')->orWhere('description', 'like', '%' . $search . '%');
-        $query = $perPage ? $query->with(['users' => function ($query) {
-            $query->select('user_id as id');
-        }])->paginate($perPage) : $query->get();
-        return GroupResource::collection($query);
+        if ($perPage) {
+            $query = $query->with(['users' => function ($query) {
+                $query->select('user_id as id');
+            }])->paginate($perPage);
+            return GroupResource::collection($query);
+        } else
+            return ['data' => $query->select('id', 'name')->withCount('users as count')->get()];
     }
     public function store(GroupRequest $request)
     {
