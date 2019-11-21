@@ -20,4 +20,8 @@ class Group extends Model
     {
         return $this->morphMany('App\Contacts', 'ownerable');
     }
+    public function leads()
+    {
+        return $this->morphMany('App\Lead', 'ownerable');
+    }
 }

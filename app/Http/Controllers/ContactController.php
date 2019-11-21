@@ -5,19 +5,18 @@ namespace App\Http\Controllers;
 use App\Contact;
 use App\Http\Requests\ContactRequest;
 use App\Http\Resources\ContactListResource;
+use App\Http\Resources\ContactResource;
 use App\Http\Resources\ContactsResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ContactController extends Controller
 {
     public function store(ContactRequest $request)
     {
-        $request = $request->all();
-        $request['ownerable_id'] = $request['ownerable']['id'];
-        $request['ownerable_type'] = $request['ownerable']['type'];
-        $request['name'] = $request['first_name'] . ' ' . $request['last_name'];
-        unset($request['ownerable']);
-        $contact = company()->contacts()->create($request);
+        $data = $request->all();
+        $data = array_merge($data, ['company_id' => company()->id, 'name' => $request->first_name . ' ' . $request->last_name]);
+        $contact = company()->contacts()->create($data);
         return created($contact);
     }
     public function update(ContactRequest $request, Contact $contact)
@@ -28,7 +27,7 @@ class ContactController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->query('perPage', 10);
-        $query = company()->leads();
+        $query = company()->contacts();
         if ($request->query('list')) {
             $name = $request->query('name');
             $query = $query->select('id', 'name', 'email', 'phone_number');
@@ -36,35 +35,35 @@ class ContactController extends Controller
             return  ContactListResource::collection($query->paginate($perPage));
         }
 
-        $fullName = $request->query('fullName');
+        $ownerableType = $request->query('ownerableType');
+        $ownerableId = $request->query('ownerableId');
+        $name = $request->query('name');
         $email = $request->query('email');
         $phoneNumber = $request->query('phoneNumber');
-        $mobileNumber = $request->query('mobile_number');
-        $customer = $request->query('customer');
+        $mobileNumber = $request->query('mobileNumber');
         $position = $request->query('position');
         $gender = $request->query('gender');
         $position = $request->query('position');
         $createdAt = $request->query('createdAt');
-        $birthday = $request->query('birthday');
         $ownerable = $request->query('ownerable');
         if ($ownerable) $ownerable = json_decode($ownerable);
 
 
-        if ($fullName) $query = $query->where('name', $fullName);
+        if ($name) $query = $query->where('name', $name);
         if ($email) $query = $query->where('email', $email);
         if ($phoneNumber) $query = $query->where('phone_number', $phoneNumber);
-        if ($customer) $query = $query->where('customer', $customer);
-        if ($position) $query = $query->where('name', $position);
-        if ($birthday) $query = $query->whereBetWeen('birthday', $birthday);
-        if ($gender) $query = $query->whereBetWeen('gender', $gender);
-        if ($mobileNumber) $query = $query->whereBetWeen('mobile_number', $mobileNumber);
-        if ($createdAt) $query = $query->whereBetween('created_at', $createdAt);
-        if ($ownerable) $query = $query->where([['ownerable_type', $ownerable->type], ['ownerable_id', $ownerable->id]]);
-        return ContactsResource::collection($query->with('ownerable:id,name')->paginate($perPage, 10));
+        if ($mobileNumber) $query = $query->where('mobile_number', $mobileNumber);
+        if ($position) $query = $query->where('position_id', $position);
+        if ($gender != null) $query = $query->where('gender', $gender);
+        if ($createdAt) $query = $query->whereBetween(DB::raw('DATE(created_at)'), $createdAt);
+        if ($ownerableType && $ownerableId) $query = $query->where([['ownerable_type', $ownerableType], ['ownerable_id', $ownerableId]]);
+        return ContactsResource::collection($query->with('ownerable:id,name', 'customer:id,name', 'position:id,name')->paginate($perPage));
     }
-    public function show(Contact $contact)
+    public function show(Contact $contact, Request $request)
     {
-        return ['data' => $contact];
+        if ($request->query('edit'))
+            return ['data' => collect($contact)->merge(['customer' => $contact->customer->name])];
+        else return new ContactResource($contact);
     }
     public function destroy(Contact $contact)
     { }

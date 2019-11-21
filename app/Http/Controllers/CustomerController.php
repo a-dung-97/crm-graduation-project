@@ -8,6 +8,7 @@ use App\Http\Resources\CustomerListResource;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\CustomersResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
@@ -18,6 +19,13 @@ class CustomerController extends Controller
     }
     public function update(CustomerRequest $request, Customer $customer)
     {
+        $result = collect([]);
+        $customer->childrenRecursive->each(function ($item) use (&$result) {
+            $result->push($item->id);
+            $this->getAllChildren($item, $result);
+        });
+        if ($result->contains($request->parent_id)) return response(['message' => "Không thể chọn vì khách hàng là cấp dưới"], 400);
+        if ($request->parent_id == $customer->id) return response(['message' => 'Không thể chọn khách hàng hiện tại là khách hàng cha'], 400);
         $customer->update($request->all());
         return updated();
     }
@@ -52,7 +60,7 @@ class CustomerController extends Controller
         if ($branch) $query = $query->where('branch_id', $branch);
         if ($ownerableType && $ownerableId) $query = $query->where([['ownerable_type', $ownerableType], ['ownerable_id', $ownerableId]]);
         if ($birthday) $query = $query->whereBetWeen('birthday', $birthday);
-        if ($createdAt) $query = $query->whereBetween('created_at', $createdAt);
+        if ($createdAt) $query = $query->whereBetween(DB::raw('DATE(created_at)'), $createdAt);
         if ($tags) $query = $query->whereHas('tags', function (Builder $query) use ($tags) {
             $query->whereIn('name', $tags);
         });
@@ -61,9 +69,22 @@ class CustomerController extends Controller
     public function show(Request $request, Customer $customer)
     {
         if ($request->query('edit'))
-            return ['data' => collect($customer)->merge(['parent' => $customer->parent->name])];
+            return ['data' => collect($customer)->merge(['parent' => $customer->parent ? $customer->parent->name : null])];
         else return new CustomerResource($customer);
     }
     public function destroy(Customer $customer)
     { }
+    public function getAllChildren($department, &$result)
+    {
+
+        $department->childrenRecursive->each(function ($item) use (&$result) {
+            $result->push($item->id);
+            if ($item->childrenRecursive->count() > 0) $this->getAllChildren($item, $result);
+        });
+    }
+
+    public function getChildrenRecursive()
+    {
+        return ['data' => Department::whereNull('parent_id')->with('childrenRecursive')->get()];
+    }
 }

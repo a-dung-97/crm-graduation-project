@@ -39,8 +39,26 @@ class Lead extends Model
     {
         return $this->morphMany('App\Task', 'taskable');
     }
-    public function user()
+    public function ownerable()
     {
-        return $this->belongsTo('App\User');
+        return $this->morphTo();
+    }
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->created_by = user()->id;
+        });
+        static::updating(function ($model) {
+            $model->updated_by = user()->id;
+        });
+    }
+    public function updatedBy()
+    {
+        return $this->belongsTo('App\User', 'updated_by');
+    }
+    public function createdBy()
+    {
+        return $this->belongsTo('App\User', 'created_by');
     }
 }

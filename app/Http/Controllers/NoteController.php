@@ -12,25 +12,26 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class NoteController extends Controller
 {
     public function index(Request $request)
     {
         $perPage = $request->query('perPage');
-        $search = $request->query('search');
+        $title = $request->query('title');
+        $content = $request->query('content');
         $type = $request->query('type');
         $user = $request->query('user');
+        $createdAt = $request->query('createdAt');
         $query =  company()->notes()->latest();
-        $date = $request->query('date');
+
+        if ($title) $query = $query->where('title', 'like', '%' . $title . '%');
+        if ($content) $query = $query->where('content', 'like', '%' . $content . '%');
         if ($user) $query = $query->where('user_id', $user);
         if ($type) $query = $query->where('noteable_type', $type);
-        if ($date) $query = $query->whereBetween('created_at', $date);
-        if ($search) $query = $query->where(function ($query) use ($search) {
-            $query->where('title', 'like', '%' . $search . '%')
-                ->orWhere('content', 'like', '%' . $search . '%');
-        });
-
+        if ($createdAt) $query = $query->whereBetween(DB::raw('DATE(created_at)'), $createdAt);
+        $query = $query->with('noteable:id,name');
         $query = $perPage ? $query->paginate($perPage) : $query->get();
         return NoteResource::collection($query);
     }

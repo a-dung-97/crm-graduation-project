@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CustomerResource extends JsonResource
+class LeadResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,26 +16,27 @@ class CustomerResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'owner' => $this->ownerable->name,
             'name' => $this->name,
-            'code' => $this->code,
             'email' => $this->email,
+            'score' => $this->score,
+            'birthday' => $this->birthday,
+            'status' => $this->status ? $this->status->name : null,
+            'source' => $this->source ? $this->source->name : null,
+
+
             'phone_number' => $this->phone_number,
             'mobile_number' => $this->mobile_number,
-            'parent' => $this->parent ? $this->parent->name : null,
-            'tax_code' => $this->tax_code,
-            'fax' => $this->fax,
+            'facebook' => $this->facebook,
+
+            'owner' => $this->ownerable->name,
+            'company' => $this->company,
             'office_address' => $this->office_address,
-            'invoice_address' => $this->invoice_address,
-            'delivery_address' => $this->delivery_address,
-            'branch' => $this->branch ? $this->branch->name : null,
-            'number_of_workers' => $this->number_of_workers,
-            'revenue' => $this->revenue,
-            'type' => $this->type ? $this->type->name : null,
             'website' => $this->website,
-            'birthday' => $this->birthday,
-            'evaluate' => $this->evaluate,
-            'source' => $this->source ? $this->source->name : null,
+            'tax_code' => $this->tax_code,
+            'number_of_workers' => $this->number_of_workers,
+            'branch' => $this->branch ? $this->branch->name : null,
+            'fax' => $this->fax,
+            'revenue' => $this->revenue,
             'description' => $this->description,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_by ? $this->updated_at : null,

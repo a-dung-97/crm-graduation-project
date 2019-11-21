@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CustomerResource extends JsonResource
+class ContactResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,25 +17,20 @@ class CustomerResource extends JsonResource
         return [
             'id' => $this->id,
             'owner' => $this->ownerable->name,
-            'name' => $this->name,
-            'code' => $this->code,
             'email' => $this->email,
             'phone_number' => $this->phone_number,
             'mobile_number' => $this->mobile_number,
-            'parent' => $this->parent ? $this->parent->name : null,
-            'tax_code' => $this->tax_code,
-            'fax' => $this->fax,
+            'customer' => $this->customer->name,
+            'skype' => $this->skype,
+            'facebook' => $this->facebook,
             'office_address' => $this->office_address,
-            'invoice_address' => $this->invoice_address,
-            'delivery_address' => $this->delivery_address,
-            'branch' => $this->branch ? $this->branch->name : null,
-            'number_of_workers' => $this->number_of_workers,
-            'revenue' => $this->revenue,
-            'type' => $this->type ? $this->type->name : null,
-            'website' => $this->website,
+            'position' => $this->position ? $this->position->name : null,
+            'name' => $this->name,
             'birthday' => $this->birthday,
-            'evaluate' => $this->evaluate,
-            'source' => $this->source ? $this->source->name : null,
+            'primary' => $this->primary,
+            'fax' => $this->fax,
+            'department' => $this->department ? $this->department->name : null,
+            'gender' => $this->gender,
             'description' => $this->description,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_by ? $this->updated_at : null,

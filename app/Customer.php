@@ -20,6 +20,14 @@ class Customer extends Model
     {
         return $this->belongsTo('App\Customer', 'parent_id');
     }
+    public function children()
+    {
+        return $this->hasMany('App\Customer', 'parent_id');
+    }
+    public function childrenRecursive()
+    {
+        return $this->children()->with('childrenRecursive');
+    }
     public function branch()
     {
         return $this->belongsTo('App\Catalog', 'branch_id');
@@ -47,5 +55,35 @@ class Customer extends Model
     public function ownerable()
     {
         return $this->morphTo();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->created_by = user()->id;
+        });
+        static::updating(function ($model) {
+            $model->updated_by = user()->id;
+        });
+    }
+    public function updatedBy()
+    {
+        return $this->belongsTo('App\User', 'updated_by');
+    }
+    public function createdBy()
+    {
+        return $this->belongsTo('App\User', 'created_by');
     }
 }

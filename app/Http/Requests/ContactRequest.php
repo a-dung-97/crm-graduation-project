@@ -26,7 +26,7 @@ class ContactRequest extends FormRequest
         return [
             'last_name' => 'required',
             'customer_id' => 'required',
-            'ownerable' => "required",
+            'ownerable_id' => "required",
             'email' => 'unique:contacts,email,' . $this->id . ',id',
             'phone_number' => $this->phone_number ? 'unique:customers,phone_number,' . $this->id . ',id' : '',
             'mobile_number' => $this->mobile_number ? 'unique:customers,mobile_number,' . $this->id . ',id' : ''
@@ -36,6 +36,7 @@ class ContactRequest extends FormRequest
     public function messages()
     {
         return [
+
             'email.unique' => 'Địa chỉ email đã tồn tại',
             'phone_number.unique' => 'Số điện thoại đã tồn tại',
             'mobile_number.unique' => 'Số di động đã tồn tại'

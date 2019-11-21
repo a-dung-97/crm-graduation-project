@@ -22,6 +22,7 @@ class CreateLeadsTable extends Migration
             $table->date('birthday')->nullable();
             $table->string('email')->nullable();
             $table->string('phone_number')->nullable();
+            $table->string('mobile_number')->nullable();
             $table->string('facebook')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
             $table->foreign('status_id')->references('id')->on('catalogs');
@@ -45,8 +46,12 @@ class CreateLeadsTable extends Migration
             $table->integer('score')->default(0);
             // $table->morphs('ownerable');
 
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->morphs('ownerable');
+
+            $table->unsignedBigInteger('created_by');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->foreign('updated_by')->references('id')->on('users');
             $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();

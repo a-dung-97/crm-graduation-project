@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LeadRequest;
 use App\Http\Resources\CustomerListResource;
+use App\Http\Resources\CustomerResource;
+use App\Http\Resources\LeadResource;
 use App\Http\Resources\LeadsResource;
 use App\Http\Resources\ListLeadResource;
 use App\Lead;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class LeadController extends Controller
 {
@@ -34,7 +37,8 @@ class LeadController extends Controller
         $source = $request->query('source');
         $company = $request->query('company');
         $branch = $request->query('branch');
-        $user = $request->query('user');
+        $ownerableType = $request->query('ownerableType');
+        $ownerableId = $request->query('ownerableId');
         $tags = $request->query('tags');
         $createdAt = $request->query('createdAt');
         $scoreFrom = $request->query('scoreFrom');
@@ -48,9 +52,9 @@ class LeadController extends Controller
         if ($source) $query = $query->where('source_id', $source);
         if ($company) $query = $query->where('company', $company);
         if ($branch) $query = $query->where('branch_id', $branch);
-        if ($user) $query = $query->where('user_id', $user);
+        if ($ownerableType && $ownerableId) $query = $query->where([['ownerable_type', $ownerableType], ['ownerable_id', $ownerableId]]);
         if ($birthday) $query = $query->whereBetWeen('birthday', $birthday);
-        if ($createdAt) $query = $query->whereBetween('created_at', $createdAt);
+        if ($createdAt) $query = $query->whereBetween(DB::raw('DATE(created_at)'), $createdAt);
         if ($scoreFrom) $query = $query->where('score', '>=', $scoreFrom);
         if ($scoreTo) $query = $query->where('score', '<=', $scoreTo);
         if ($tags) $query = $query->whereHas('tags', function (Builder $query) use ($tags) {
@@ -73,7 +77,7 @@ class LeadController extends Controller
     {
         $data = $request->all();
         $data = array_merge($data, ['company_id' => company()->id, 'name' => $request->first_name . ' ' . $request->last_name]);
-        $lead = user()->leads()->create($data);
+        $lead = company()->leads()->create($data);
         return created($lead);
     }
 
@@ -83,9 +87,11 @@ class LeadController extends Controller
      * @param  \App\Lead  $lead
      * @return \Illuminate\Http\Response
      */
-    public function show(Lead $lead)
+    public function show(Lead $lead, Request $request)
     {
-        return ['data' => $lead];
+        if ($request->query('edit'))
+            return ['data' => $lead];
+        else return new LeadResource($lead);
     }
 
     /**

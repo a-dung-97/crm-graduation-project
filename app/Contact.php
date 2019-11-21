@@ -7,17 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     protected $guarded = [];
-    public function source()
+
+    public function position()
     {
-        return $this->belongsTo('App\Catalog', 'source_id');
+        return $this->belongsTo('App\Catalog', 'position_id');
     }
-    public function branch()
+    public function department()
     {
-        return $this->belongsTo('App\Catalog', 'branch_id');
+        return $this->belongsTo('App\Catalog', 'department_id');
     }
     public function company()
     {
         return $this->belongsTo('App\Company');
+    }
+    public function customer()
+    {
+        return $this->belongsTo('App\Customer');
     }
     public function notes()
     {
@@ -38,5 +43,23 @@ class Contact extends Model
     public function ownerable()
     {
         return $this->morphTo();
+    }
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->created_by = user()->id;
+        });
+        static::updating(function ($model) {
+            $model->updated_by = user()->id;
+        });
+    }
+    public function updatedBy()
+    {
+        return $this->belongsTo('App\User', 'updated_by');
+    }
+    public function createdBy()
+    {
+        return $this->belongsTo('App\User', 'created_by');
     }
 }
