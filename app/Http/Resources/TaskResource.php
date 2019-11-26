@@ -26,8 +26,9 @@ class TaskResource extends JsonResource
             'description' => $this->description,
             'taskable' => [
                 'type' => $this->taskable_type,
-                'detail' => $this->taskable()->select('id', 'name', 'email', 'phone_number')->first()
+                'detail' => $this->taskable()->select('id', 'name', 'email', 'phone_number', 'mobile_number')->first()
             ],
+            'contact' => $this->contact()->select('id', 'name', 'email', 'phone_number', 'mobile_number')->first(),
             'reminder' => [
                 'time' => $this->reminder_time,
                 'type' => $this->reminder_type,

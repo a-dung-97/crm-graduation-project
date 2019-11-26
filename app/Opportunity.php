@@ -4,10 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class Opportunity extends Model
 {
-
     protected $guarded  = [];
+    public function status()
+    {
+        return $this->belongsTo('App\Catalog', 'status_id');
+    }
     public function source()
     {
         return $this->belongsTo('App\Catalog', 'source_id');
@@ -16,29 +19,17 @@ class Customer extends Model
     {
         return $this->belongsTo('App\Catalog', 'type_id');
     }
-    public function parent()
-    {
-        return $this->belongsTo('App\Customer', 'parent_id');
-    }
-    public function children()
-    {
-        return $this->hasMany('App\Customer', 'parent_id');
-    }
-    public function contacts()
-    {
-        return $this->hasMany('App\Contact');
-    }
-    public function childrenRecursive()
-    {
-        return $this->children()->with('childrenRecursive');
-    }
-    public function branch()
-    {
-        return $this->belongsTo('App\Catalog', 'branch_id');
-    }
     public function company()
     {
         return $this->belongsTo('App\Company');
+    }
+    public function customer()
+    {
+        return $this->belongsTo('App\Customer');
+    }
+    public function contact()
+    {
+        return $this->belongsTo('App\Contact');
     }
     public function notes()
     {
@@ -48,33 +39,10 @@ class Customer extends Model
     {
         return $this->morphMany('App\File', 'fileable');
     }
-    public function tags()
-    {
-        return $this->morphToMany('App\Tag', 'taggable');
-    }
-    public function tasks()
-    {
-        return $this->morphMany('App\Task', 'taskable');
-    }
     public function ownerable()
     {
         return $this->morphTo();
     }
-    public function quotes()
-    {
-        return $this->hasMany('App\Quotes');
-    }
-
-
-
-
-
-
-
-
-
-
-
     protected static function boot()
     {
         parent::boot();
@@ -92,5 +60,9 @@ class Customer extends Model
     public function createdBy()
     {
         return $this->belongsTo('App\User', 'created_by');
+    }
+    public function quotes()
+    {
+        return $this->hasMany('App\Quotes');
     }
 }

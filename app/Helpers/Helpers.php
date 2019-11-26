@@ -3,6 +3,7 @@
 use App\Contact;
 use App\Customer;
 use App\Lead;
+use App\Opportunity;
 use App\Product;
 
 function company()
@@ -59,6 +60,9 @@ function getModel($type, $id)
         case 'contact':
             $model = Contact::find($id);
             break;
+        case 'opportunity':
+            $model = Opportunity::find($id);
+            break;
         default:
             break;
     }
@@ -108,4 +112,9 @@ function convertTypeToModel($value)
         default:
             break;
     }
+}
+
+function error($msg)
+{
+    return response(['message' => $msg], 400);
 }

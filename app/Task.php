@@ -27,4 +27,8 @@ class Task extends Model
     {
         return $this->belongsTo('App\User', 'created_by');
     }
+    public function contact()
+    {
+        return $this->belongsTo('App\Contact');;
+    }
 }

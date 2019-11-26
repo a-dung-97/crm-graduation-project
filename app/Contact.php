@@ -38,7 +38,7 @@ class Contact extends Model
     }
     public function tasks()
     {
-        return $this->morphMany('App\Task', 'taskable');
+        return $this->hasMany('App\Task');
     }
     public function ownerable()
     {
@@ -61,5 +61,9 @@ class Contact extends Model
     public function createdBy()
     {
         return $this->belongsTo('App\User', 'created_by');
+    }
+    public function quotes()
+    {
+        return $this->hasMany('App\Quotes');
     }
 }

@@ -24,4 +24,8 @@ class Group extends Model
     {
         return $this->morphMany('App\Lead', 'ownerable');
     }
+    public function quotes()
+    {
+        return $this->morphMany('App\Quotes', 'ownerable');
+    }
 }

@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Lead;
+use App\LeadScoreRule;
+use App\Observers\LeadObserver;
+use App\Observers\LeadScoreRuleObserver;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,5 +26,8 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    { }
+    {
+        Lead::observe(LeadObserver::class);
+        LeadScoreRule::observe(LeadScoreRuleObserver::class);
+    }
 }

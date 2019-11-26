@@ -91,4 +91,8 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->morphMany('App\Contacts', 'ownerable');
     }
+    public function quotes()
+    {
+        return $this->morphMany('App\Quotes', 'ownerable');
+    }
 }

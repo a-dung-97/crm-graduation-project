@@ -14,13 +14,13 @@ class CreateProductablesTable extends Migration
     public function up()
     {
         Schema::create('productables', function (Blueprint $table) {
-            $table->bigIncrements('id');
             $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products');
-            $table->unsignedBigInteger('warehouse_id');
+            $table->foreign('product_id')->references('id')->on('products')->nullable();
+            $table->unsignedBigInteger('warehouse_id')->nullable();
             $table->foreign('warehouse_id')->references('id')->on('warehouses');
+            $table->float('discount', 5, 2)->default(0);
+            $table->float('tax', 5, 2)->default(0);
             $table->integer('quantity')->default(1);
-            $table->tinyInteger('tax')->default(0);
             $table->string('unit')->nullable();
             $table->string('price')->default(0);
             $table->morphs('productable');

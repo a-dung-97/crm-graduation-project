@@ -65,7 +65,7 @@ class TaskController extends Controller
     public function show(Request $request, Task $task)
     {
         if ($request->query('edit')) {
-            $task = collect($task)->merge(['taskable' => $task->taskable->name]);
+            $task = collect($task)->merge(['taskable' => $task->taskable->name, 'contact' => $task->contact ? $task->contact->name : null,]);
             return ['data' => $task];
         }
         return new TaskResource($task);

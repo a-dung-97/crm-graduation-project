@@ -80,4 +80,16 @@ class Company extends Model
     {
         return $this->hasMany('App\Contact');
     }
+    public function quotes()
+    {
+        return $this->hasMany('App\Quote');
+    }
+    public function opportunities()
+    {
+        return $this->hasMany('App\Opportunity');
+    }
+    public function leadScoreRules()
+    {
+        return $this->hasMany('App\LeadScoreRule');
+    }
 }

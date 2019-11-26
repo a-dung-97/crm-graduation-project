@@ -73,6 +73,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('catalogs/list', 'CatalogController@listCatalogs');
     Route::apiResource('catalogs', 'CatalogController', ['except' => 'show']);
 
+    Route::post('leads/convert/{lead}', 'LeadController@convert');
+
     Route::apiResource('leads', 'LeadController');
 
     Route::put('tasks/{task}/finish', 'TaskController@finishTask');
@@ -83,9 +85,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::apiResource('customers', 'CustomerController');
     Route::apiResource('contacts', 'ContactController');
+    Route::apiResource('opportunities', 'OpportunityController');
+    Route::apiResource('quotes', 'QuoteController');
+    Route::apiResource('orders', 'OrderController');
+    Route::apiResource('lead-score-rules', 'LeadScoreRuleController');
 });
 Route::post('tracking', 'MailController@tracking');
 
-Route::get('test', function (Request $request) {
-    return ['data' => json_decode($request->query('options'))->type];
-});
+Route::get('test/{lead}', 'LeadScoreRuleController@test');

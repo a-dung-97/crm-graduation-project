@@ -22,7 +22,7 @@ class TagController extends Controller
         $tags = $request->all();
         $newTags = [];
         foreach ($tags as $tag) {
-            $newTag = Tag::where('name', $tag)->first();
+            $newTag = company()->tags()->where('name', $tag)->first();
             if (!$newTag) {
                 $newTag = company()->tags()->create(['name' => $tag, "type" => $type]);
             }
