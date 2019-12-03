@@ -11,6 +11,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Mail\VerifyEmail;
 use App\User;
 use Carbon\Carbon;
+use CatalogSeeder;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -53,6 +54,10 @@ class AuthController extends Controller
         if ($user) {
             if (!$user->email_verified_at) {
                 $user->update(['email_verified_at' => Carbon::now()]);
+                $user->emailAddresses()->create([
+                    'email' => $user->email,
+                    'verified' => 2
+                ]);
                 return view('auth.verify_email');
             } else abort(404);
         } else abort(404);
@@ -139,6 +144,7 @@ class AuthController extends Controller
         $firstDepartment = $company->departments()->create(['name' => 'Công ty', 'description' => 'Công ty']);
         $firstPosition = $company->positions()->create(['name' => 'CEO']);
         $firstRole = $company->roles()->create(['name' => 'Full', 'code' => 'full']);
+        CatalogSeeder::run($company->id);
         auth()->user()->update(['company_id' => $company->id, 'position_id' => $firstPosition->id, 'role_id' => $firstRole->id, 'department_id' => $firstDepartment->id]);
         return response('created', Response::HTTP_CREATED);
     }

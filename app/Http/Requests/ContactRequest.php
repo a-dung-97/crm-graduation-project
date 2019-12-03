@@ -28,8 +28,8 @@ class ContactRequest extends FormRequest
             'customer_id' => 'required',
             'ownerable_id' => "required",
             'email' => 'unique:contacts,email,' . $this->id . ',id',
-            'phone_number' => $this->phone_number ? 'unique:customers,phone_number,' . $this->id . ',id' : '',
-            'mobile_number' => $this->mobile_number ? 'unique:customers,mobile_number,' . $this->id . ',id' : ''
+            'phone_number' => $this->phone_number ? 'unique:contacts,phone_number,' . $this->id . ',id' : '',
+            'mobile_number' => $this->mobile_number ? 'unique:contacts,mobile_number,' . $this->id . ',id' : ''
 
         ];
     }

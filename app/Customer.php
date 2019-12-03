@@ -62,7 +62,19 @@ class Customer extends Model
     }
     public function quotes()
     {
-        return $this->hasMany('App\Quotes');
+        return $this->hasMany('App\Quote');
+    }
+    public function orders()
+    {
+        return $this->hasMany('App\Order');
+    }
+    public function opportunities()
+    {
+        return $this->hasMany('App\Opportunity');
+    }
+    public function mailingLists()
+    {
+        return $this->morphToMany('App\MailingList', 'listable', 'mailing_listables');
     }
 
 

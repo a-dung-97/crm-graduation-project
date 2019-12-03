@@ -21,7 +21,7 @@ class ReceiptController extends Controller
     {
         $perPage = $request->query('perPage');
         $search = $request->query('search');
-        $query =  Receipt::latest('date');
+        $query =  company()->receipts()->latest('date');
         if ($search) $query = $query->where('code', 'like', '%' . $search . '%')->orWhere('description', 'like', '%' . $search . '%');
         $query = $perPage ? $query->paginate($perPage) : $query->get();
         return ReceiptResource::collection($query);

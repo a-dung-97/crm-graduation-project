@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderRequest;
+use App\Http\Resources\InvoicesResource;
+use App\Http\Resources\OderResource;
 use App\Http\Resources\OrderListResource;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrdersResource;
+use App\Http\Resources\ProductQuoteResource;
+use App\Http\Resources\QuotesResource;
 use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -27,8 +31,8 @@ class OrderController extends Controller
 
 
         $query = company()->orders()->latest('id');
-        if ($list) return  OrderListResource::collection($query->select('id', 'code', 'customer_id')->with('customer:id,name')->paginate($perPage));
         if ($code) $query = $query->where('code', 'like', '%' . $code . '%');
+        if ($list) return  OrderListResource::collection($query->select('id', 'code', 'customer_id')->with('customer:id,name')->paginate($perPage));
         if ($status) $query = $query->where('status_id',  $code);
         if ($customer) $query = $query->whereHas('customer', function (Builder $query) use ($customer) {
             $query->where('name', 'like', '%' . $customer . '%');
@@ -95,5 +99,10 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         delete($order);
+    }
+
+    public function getInvoices(Order $order)
+    {
+        return InvoicesResource::collection($order->invoices);
     }
 }

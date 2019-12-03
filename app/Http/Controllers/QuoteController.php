@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\QuoteRequest;
+use App\Http\Resources\OrdersResource;
+use App\Http\Resources\ProductQuoteResource;
 use App\Http\Resources\QuoteListResource;
 use App\Http\Resources\QuoteResource;
 use App\Http\Resources\QuotesResource;
@@ -28,8 +30,8 @@ class QuoteController extends Controller
         $ownerableType = $request->query('ownerableType');
         $ownerableId = $request->query('ownerableId');
         $query = company()->quotes()->latest('id');
-        if ($list) return  QuoteListResource::collection($query->select('id', 'code', 'customer_id')->with('customer:id,name')->paginate($perPage));
         if ($code) $query = $query->where('code', 'like', '%' . $code . '%');
+        if ($list) return  QuoteListResource::collection($query->select('id', 'code', 'customer_id')->with('customer:id,name')->paginate($perPage));
         if ($deliveryAddress) $query = $query->whereBetWeen('delivery_date', $deliveryAddress);
         if ($customer) $query = $query->whereHas('customer', function (Builder $query) use ($customer) {
             $query->where('name', 'like', '%' . $customer . '%');
@@ -95,5 +97,9 @@ class QuoteController extends Controller
     public function destroy(Quote $quote)
     {
         delete($quote);
+    }
+    public function getOrders(Quote $quote)
+    {
+        return OrdersResource::collection($quote->orders);
     }
 }

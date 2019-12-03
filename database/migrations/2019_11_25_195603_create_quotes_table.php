@@ -25,7 +25,7 @@ class CreateQuotesTable extends Migration
             $table->foreign('opportunity_id')->references('id')->on('opportunities');
             $table->date('quote_date');
             $table->date('expiration_date')->nullable();
-            $table->decimal('exchange_rate', 15, 2)->nullable();
+            $table->decimal('exchange_rate', 15, 0)->nullable();
             $table->string('delivery_address')->nullable();
             $table->string('invoice_address')->nullable();
             $table->text('note')->nullable();

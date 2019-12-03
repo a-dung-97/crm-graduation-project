@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Customer;
 use App\Http\Requests\CustomerRequest;
+use App\Http\Resources\ContactsResource;
 use App\Http\Resources\CustomerListResource;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\CustomersResource;
+use App\Http\Resources\OpportunitiesResource;
+use App\Http\Resources\OrdersResource;
+use App\Http\Resources\QuotesResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -86,5 +90,22 @@ class CustomerController extends Controller
     public function getChildrenRecursive()
     {
         return ['data' => Department::whereNull('parent_id')->with('childrenRecursive')->get()];
+    }
+    public function getRelatedInfo(Customer $customer, $type, Request $request)
+    {
+        switch ($type) {
+            case 'opportunity':
+                return OpportunitiesResource::collection($customer->opportunities()->paginate($request->query('perPage', 10)));
+                break;
+            case 'contact':
+                return ContactsResource::collection($customer->contacts()->paginate($request->query('perPage', 10)));
+                break;
+            case 'quote':
+                return QuotesResource::collection($customer->quotes()->paginate($request->query('perPage', 10)));
+                break;
+            default:
+                return OrdersResource::collection($customer->orders()->paginate($request->query('perPage', 10)));
+                break;
+        }
     }
 }

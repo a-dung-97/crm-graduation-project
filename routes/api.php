@@ -83,11 +83,30 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('tasks/{type}/{id}', 'TaskController@addTask');
     Route::get('tasks/{type}/{id}', 'TaskController@getTasks');
 
+    Route::get('customers/{customer}/{type}', 'CustomerController@getRelatedInfo');
     Route::apiResource('customers', 'CustomerController');
     Route::apiResource('contacts', 'ContactController');
     Route::apiResource('opportunities', 'OpportunityController');
+
+    Route::get('quotes/{quote}/order', 'QuoteController@getOrders');
+    Route::get('orders/{order}/invoice', 'OrderController@getInvoices');
     Route::apiResource('quotes', 'QuoteController');
     Route::apiResource('orders', 'OrderController');
+
+
+    Route::apiResource('cashbooks', 'CashbookController');
+
+
+    Route::apiResource('invoices', 'InvoiceController');
+    Route::put('bills/{bill}/verify', 'BillController@verify');
+
+    Route::apiResource('bills', 'BillController', ['except' => 'show']);
+
+    Route::put('email-addresses/{email_address}/primary', 'EmailAddressController@setPrimary');
+    Route::get('email-addresses/{email_address}/confirm', 'EmailAddressController@sendConfirmEmail');
+    Route::apiResource('email-addresses', 'EmailAddressController');
+    Route::post('mailing-lists/{mailing_list}/members', 'MailingListController@addMembers');
+    Route::apiResource('mailing-lists', 'MailingListController');
     Route::apiResource('lead-score-rules', 'LeadScoreRuleController');
 });
 Route::post('tracking', 'MailController@tracking');

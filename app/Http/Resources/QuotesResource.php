@@ -21,6 +21,8 @@ class QuotesResource extends JsonResource
             'delivery_date' => $this->delivery_date,
             'customer' => $this->customer->name,
             'owner' => $this->ownerable->name,
+            'status' => $this->status ? $this->status->name : null,
+            'delivery_address' => $this->delivery_address
         ];
     }
 }

@@ -61,4 +61,8 @@ class Lead extends Model
     {
         return $this->belongsTo('App\User', 'created_by');
     }
+    public function mailingLists()
+    {
+        return $this->morphToMany('App\MailingList', 'listable', 'mailing_listables');
+    }
 }

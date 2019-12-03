@@ -15,10 +15,12 @@ class VerifyEmail extends Mailable
      *
      * @return void
      */
-    protected $email_token;
-    public function __construct($email_token)
+    protected $emailToken;
+    protected $isConfirming;
+    public function __construct($emailToken, $isConfirming = false)
     {
-        $this->email_token = $email_token;
+        $this->emailToken = $emailToken;
+        $this->isConfirming = $isConfirming;
     }
 
     /**
@@ -28,6 +30,9 @@ class VerifyEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Xác nhận email đăng kí tài khoản ADCRM')->view('mail.verify_email')->with(['email_token' => $this->email_token]);
+        if ($this->isConfirming) {
+            return $this->subject('Xác nhận email của bạn')->view('mail.confirm_email')->with(['emailToken' => $this->emailToken]);
+        }
+        return $this->subject('Xác nhận email đăng kí tài khoản ADCRM')->view('mail.verify_email')->with(['emailToken' => $this->emailToken]);
     }
 }

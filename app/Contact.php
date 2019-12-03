@@ -66,4 +66,12 @@ class Contact extends Model
     {
         return $this->hasMany('App\Quotes');
     }
+    public function getPrimaryAttribute($val)
+    {
+        return (bool) $val;
+    }
+    public function mailingLists()
+    {
+        return $this->morphToMany('App\MailingList', 'listable', 'mailing_listables');
+    }
 }

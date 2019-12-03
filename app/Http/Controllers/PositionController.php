@@ -59,7 +59,7 @@ class PositionController extends Controller
 
     public function getChildrenRecursive()
     {
-        return ['data' => Position::whereNull('parent_id')->with('childrenRecursive')->get()];
+        return ['data' => company()->positions()->whereNull('parent_id')->with('childrenRecursive')->get()];
     }
 
     public function destroy(Position $position)

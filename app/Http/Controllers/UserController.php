@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use App\Invitation;
 use App\Mail\InvitationEmail;
 use App\User;
+use Bogardo\Mailgun\Facades\Mailgun;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
@@ -59,7 +60,11 @@ class UserController extends Controller
         $data['expired_at'] = Carbon::now()->addDay()->toDateTimeString();
         $this->user->invitations()->create($data);
 
-        Mail::to($request->email)->queue(new InvitationEmail($this->user->name,  $data['invite_code']));
+        Mailgun::send('mail.invitation', ['name' => $this->user->name, 'code' => $data['invite_code']], function ($message) use ($request) {
+            $message->from('noreply@crm.adung.software', 'Anh Dũng')->to($request->email)->subject('Lời mời tham gia ADCRM!');
+        });
+        //Mailgun::api()
+        //Mail::to($request->email)->queue(new InvitationEmail($this->user->name,  $data['invite_code']));
         return ['message' => 'Gửi lời mời thành công'];
     }
     public function comfirmInvitationEmail($inviteCode)

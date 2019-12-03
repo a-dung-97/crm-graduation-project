@@ -40,6 +40,12 @@ return [
             'queue' => 'default',
             'retry_after' => 90,
         ],
+        'email' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'email',
+            'retry_after' => 90,
+        ],
 
         'beanstalkd' => [
             'driver' => 'beanstalkd',

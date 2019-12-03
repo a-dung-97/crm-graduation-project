@@ -60,7 +60,7 @@ class DepartmentController extends Controller
 
     public function getChildrenRecursive()
     {
-        return ['data' => Department::whereNull('parent_id')->with('childrenRecursive')->get()];
+        return ['data' => company()->departments()->whereNull('parent_id')->with('childrenRecursive')->get()];
     }
     /**
      * Remove the specified resource from storage.

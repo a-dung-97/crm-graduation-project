@@ -22,10 +22,10 @@ class CreateProductsTable extends Migration
             $table->string('manufacturer')->nullable();
             $table->string('brand')->nullable();
             $table->string('barcode')->nullable();
-            $table->decimal('perchase_price', 15, 2)->default(0);
+            $table->decimal('perchase_price', 15, 0)->default(0);
             $table->text('perchase_detail')->nullable();
             $table->tinyInteger('tax')->default(0);
-            $table->decimal('sale_price', 15, 2)->default(0);
+            $table->decimal('sale_price', 15, 0)->default(0);
             $table->string('distributor')->nullable();
             $table->text('sale_detail')->nullable();
             $table->unsignedBigInteger('company_id');

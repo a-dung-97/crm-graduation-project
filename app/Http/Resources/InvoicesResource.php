@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OderResource extends JsonResource
+class InvoicesResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +15,16 @@ class OderResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
+            'code' => $this->code,
             'owner' => $this->ownerable->name,
-            'products' => ProductQuoteResource::collection($this->products),
+            'order' => $this->order->code,
+            'customer' => $this->customer,
+            'user' => $this->user->name,
             'status' => $this->status ? $this->status->name : null,
-            'customer' => new CustomersResource($this->customer),
-            'contact' => new ContactsResource($this->contact),
-            'opportunity' => new OpportunitiesResource($this->opportunity),
+            'created_at' => $this->created_at,
+            'payment_amount' => $this->payment_amount,
+            'payment_method' => $this->payment_method
         ];
     }
 }

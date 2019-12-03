@@ -7,6 +7,7 @@ use App\LeadScoreRule;
 use App\Observers\LeadObserver;
 use App\Observers\LeadScoreRuleObserver;
 use Illuminate\Support\ServiceProvider;
+use GuzzleHttp\Client;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,7 +18,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('mailgun.client', function () {
+            return \Http\Adapter\Guzzle6\Client::createWithConfig([
+                // your Guzzle6 configuration
+            ]);
+        });
     }
 
     /**

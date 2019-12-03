@@ -35,7 +35,7 @@ class CreateCustomersTable extends Migration
             $table->string('tax_code')->nullable();
             $table->string('fax')->nullable();
             $table->integer('number_of_workers')->nullable();
-            $table->decimal('revenue', 15, 2)->nullable();
+            $table->decimal('revenue', 15, 0)->nullable();
             $table->unsignedBigInteger('branch_id')->nullable();
             $table->foreign('branch_id')->references('id')->on('catalogs');
             $table->string('office_address')->nullable();

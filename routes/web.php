@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/verify-email/{email_token}', 'AuthController@verifyEmail')->name('verify-email');
+Route::get('/confirm-email/{email_token}', 'EmailAddressController@verify')->name('confirm-email');
 
 Route::get('invite/{invite_code}', 'UserController@comfirmInvitationEmail')->name('invite');
 Route::post('invite/{invite_code}', 'UserController@acceptInvitation');

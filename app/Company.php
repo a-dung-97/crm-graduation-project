@@ -84,6 +84,22 @@ class Company extends Model
     {
         return $this->hasMany('App\Quote');
     }
+    public function orders()
+    {
+        return $this->hasMany('App\Order');
+    }
+    public function bills()
+    {
+        return $this->hasMany('App\Bill');
+    }
+    public function cashbooks()
+    {
+        return $this->hasMany('App\Cashbook');
+    }
+    public function invoices()
+    {
+        return $this->hasMany('App\Invoice');
+    }
     public function opportunities()
     {
         return $this->hasMany('App\Opportunity');
@@ -91,5 +107,9 @@ class Company extends Model
     public function leadScoreRules()
     {
         return $this->hasMany('App\LeadScoreRule');
+    }
+    public function mailingLists()
+    {
+        return $this->hasMany('App\MailingList');
     }
 }

@@ -1,0 +1,1 @@
+<a href="{{ route('confirm-email',$emailToken) }}">Ấn vào đây để xác nhận email của bạn</a>
