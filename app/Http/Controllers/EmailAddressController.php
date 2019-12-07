@@ -46,7 +46,10 @@ class EmailAddressController extends Controller
     {
         $token = Str::random(60);
         $emailAddress->update(['token' => $token, 'verified' => 1]);
-        Mail::to(user())->queue(new VerifyEmail($token, true));
+        Mail::to(
+            $emailAddress->email,
+            user()->name
+        )->queue(new VerifyEmail($token, true));
         return updated();
     }
 }

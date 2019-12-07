@@ -27,7 +27,7 @@ class CustomerRequest extends FormRequest
             'ownerable_id' => 'required',
             'name' => 'required',
             'code' => 'required|unique:customers,code,' . $this->id . ',id',
-            'email' => 'unique:customers,email,' . $this->id . ',id',
+            'email' => $this->email ? 'unique:customers,email,' . $this->id . ',id' : '',
             'phone_number' => $this->phone_number ? 'unique:customers,phone_number,' . $this->id . ',id' : '',
             'mobile_number' => $this->mobile_number ? 'unique:customers,mobile_number,' . $this->id . ',id' : ''
         ];

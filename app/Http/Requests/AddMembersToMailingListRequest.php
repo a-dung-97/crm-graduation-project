@@ -25,9 +25,14 @@ class AddMembersToMailingListRequest extends FormRequest
     {
         return [
             'type' => 'required',
-            'members' => 'required|min:0',
-            'members.*.id' => 'required',
-            'members.*.email' => 'required',
+            'mailing_lists' => 'required|min:1',
+            'members' => 'required',
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'mailing_lists.required' => 'Hãy chọn ít nhất một danh sách email'
         ];
     }
 }

@@ -9,9 +9,11 @@ use App\Http\Requests\CompanyRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\VerifyEmail;
+use App\Services\TinyDrive;
 use App\User;
 use Carbon\Carbon;
 use CatalogSeeder;
+use Firebase\JWT\JWT;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -71,6 +73,7 @@ class AuthController extends Controller
     }
     public function login(LoginRequest $request)
     {
+
         $credentials = ['email' => $request->email, 'password' => $request->password];
 
         if (!$token = auth()->attempt($credentials)) {
@@ -100,6 +103,7 @@ class AuthController extends Controller
             'company' => $user->company_id ? $user->company->name : null,
             'department' => $user->department_id ? $user->department->name : null,
             'position' => $user->position_id ? $user->position->name : null,
+            'tiny_drive_token' => TinyDrive::generateToken($user)
         ]]);
     }
 
@@ -147,5 +151,14 @@ class AuthController extends Controller
         CatalogSeeder::run($company->id);
         auth()->user()->update(['company_id' => $company->id, 'position_id' => $firstPosition->id, 'role_id' => $firstRole->id, 'department_id' => $firstDepartment->id]);
         return response('created', Response::HTTP_CREATED);
+    }
+    private function generateTinyProviderToken($user)
+    {
+        $payload = array(
+            "sub" => $user->id, // unique user id string
+            "name" => $user->name, // full name of user
+            "exp" => time() + 60 * 60 * 24, // 10 minute expiration
+            "https://claims.tiny.cloud/drive/root" => "/" + $user->id,
+        );
     }
 }

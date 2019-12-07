@@ -4,13 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddMembersToMailingListRequest;
 use App\Http\Requests\MailingListRequest;
+use App\Http\Resources\MailingListResource;
 use App\Http\Resources\MailingListsResource;
 use App\Jobs\AddMembersToMailingList;
 use App\Jobs\CreateMailingList;
 use App\Jobs\DeleteMailingList;
+use App\Jobs\UpdateMailingList;
 use App\MailingList;
+use App\MailingListable;
+use Bogardo\Mailgun\Facades\Mailgun;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use MailingListables;
 
 class MailingListController extends Controller
 {
@@ -23,10 +29,10 @@ class MailingListController extends Controller
     {
         $list = $request->query('list');
         $query = company()->mailingLists();
-        if ($list) return ['data' => $query->select('id', 'name')->get()];
+        if ($list) return ['data' => $query->select('id', 'name', 'description')->get()];
         $perPage = $request->query('perPage', 10);
-        $name = $request->query('name');
-        if ($name) $query = $query->where('name', 'like', '%' . $name . '%');
+        $search = $request->query('search');
+        if ($search) $query = $query->where('name', 'like', '%' . $search . '%')->orWhere('description', 'like', '%' . $search . '%');
         return MailingListsResource::collection($query->withCount('customers', 'contacts', 'leads')->paginate($perPage));
     }
 
@@ -40,11 +46,7 @@ class MailingListController extends Controller
      */
     public function store(MailingListRequest $request)
     {
-        $request = $request->all();
-        $request['address'] = strtolower(Str::random(10)) . company()->id . '@' . env('MAILGUN_DOMAIN');
-
-        $mailingList = company()->mailingLists()->create($request);
-        CreateMailingList::dispatch($mailingList);
+        company()->mailingLists()->create($request->all());
         return created();
     }
 
@@ -54,44 +56,48 @@ class MailingListController extends Controller
         return updated();
     }
 
+    public function show(MailingList $mailingList)
+    {
+        return MailingListResource::collection($mailingList->related()->with('listables')->get());
+    }
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\MailingList  $mailingList
      * @return \Illuminate\Http\Response
      */
-    public function addMembers(AddMembersToMailingListRequest $request, MailingList $mailingList)
+    public function addMembers(AddMembersToMailingListRequest $request)
     {
-
-        //return $request;
-        $memberIds = collect($request->members)->pluck('id');
         $members = $request->members;
-        foreach ($members as &$member) {
-            $member['address'] = $member['email'];
-            unset($member['id']);
-            unset($member['email']);
+        $lists = $request->mailing_lists;
+        $type = $request->type;
+        $errors = [];
+        foreach ($lists as $list) {
+            $list = MailingList::find($list['id']);
+            $emails = $list->related()->with('listables')->get()->map(function ($item) {
+                return $item->listable;
+            })->pluck('email');
+            foreach ($members as $member) {
+                if ($emails->contains($member['email'])) array_push($errors, ['email' => $member['email'], 'name' => $member['name'], 'list' => $list['name']]);
+                else {
+                    if ($type == "contact") $list->contacts()->attach($member['id']);
+                    if ($type == "customer") $list->customers()->attach($member['id']);
+                    if ($type == "lead") $list->leads()->attach($member['id']);
+                }
+            }
         }
-        switch ($request->type) {
-            case 'customer':
-                $mailingList->customers()->syncWithoutDetaching($memberIds);
-                break;
-            case 'contact':
-                $mailingList->contacts()->syncWithoutDetaching($memberIds);
-                break;
-            case 'lead':
-                $mailingList->leads()->syncWithoutDetaching($memberIds);
-                break;
-            default:
-                break;
-        }
-        AddMembersToMailingList::dispatch($mailingList->address, $members);
-        return created();
+        return ['errors' => $errors];
     }
     public function destroy(MailingList $mailingList)
     {
-        DeleteMailingList::dispatch($mailingList);
         delete($mailingList);
     }
-    public function deleteMembers()
-    { }
+    public function deleteMembers(Request $request, $id)
+    {
+        $members = $request->all();
+        foreach ($members as $member) {
+            DB::delete('delete from mailing_listables where mailing_list_id = ? and listable_type = ? and listable_id = ? ', [$id, $member['type'], $member['id']]);
+        }
+        return response(null, 204);
+    }
 }

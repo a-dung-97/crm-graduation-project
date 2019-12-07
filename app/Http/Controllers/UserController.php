@@ -30,7 +30,7 @@ class UserController extends Controller
     {
         $perPage = $request->query('perPage');
         $search = $request->query('search');
-        $query =  company()->users()->latest();
+        $query =  User::latest();
 
         if ($search) $query = $query->where('name', 'like', '%' . $search . '%')
             ->orWhere('email', 'like', '%' . $search . '%')

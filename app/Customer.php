@@ -76,6 +76,10 @@ class Customer extends Model
     {
         return $this->morphToMany('App\MailingList', 'listable', 'mailing_listables');
     }
+    public function email()
+    {
+        return $this->morphToMany('App\Email', 'mailable');
+    }
 
 
 

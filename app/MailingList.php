@@ -19,4 +19,12 @@ class MailingList extends Model
     {
         return $this->morphedByMany('App\Customer', 'listable', 'mailing_listables');
     }
+    public function related()
+    {
+        return $this->hasMany('App\MailingListable');
+    }
+    public function campaigns()
+    {
+        return $this->hasMany('App\EmailCampaign');
+    }
 }

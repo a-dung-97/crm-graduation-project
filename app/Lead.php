@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Lead extends Model
 {
@@ -52,6 +53,9 @@ class Lead extends Model
         static::updating(function ($model) {
             $model->updated_by = user()->id;
         });
+        static::addGlobalScope('converted', function (Builder $builder) {
+            $builder->where('converted', 0);
+        });
     }
     public function updatedBy()
     {
@@ -64,5 +68,9 @@ class Lead extends Model
     public function mailingLists()
     {
         return $this->morphToMany('App\MailingList', 'listable', 'mailing_listables');
+    }
+    public function email()
+    {
+        return $this->morphToMany('App\Email', 'mailable');
     }
 }

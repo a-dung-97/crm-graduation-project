@@ -105,9 +105,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('email-addresses/{email_address}/primary', 'EmailAddressController@setPrimary');
     Route::get('email-addresses/{email_address}/confirm', 'EmailAddressController@sendConfirmEmail');
     Route::apiResource('email-addresses', 'EmailAddressController');
-    Route::post('mailing-lists/{mailing_list}/members', 'MailingListController@addMembers');
+    Route::post('mailing-lists/members', 'MailingListController@addMembers');
+    Route::delete('mailing-lists/{mailing_list}/members', 'MailingListController@deleteMembers');
     Route::apiResource('mailing-lists', 'MailingListController');
     Route::apiResource('lead-score-rules', 'LeadScoreRuleController');
+    Route::apiResource('email-templates', 'EmailTemplateController');
+    Route::apiResource('email-campaigns', 'EmailCampaignController', ['except' => 'update']);
 });
 Route::post('tracking', 'MailController@tracking');
 

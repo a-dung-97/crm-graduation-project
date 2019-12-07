@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DepartmentRequest extends FormRequest
@@ -24,14 +25,14 @@ class DepartmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:departments,name,' . $this->id . ',id'
+            // php artisan make:rule Uppercase
+            'name' => ['required', new Unique('departments', 'name', $this->id)]
         ];
     }
     public function messages()
     {
         return [
             'name.required' => 'Hãy nhập tên phòng ban',
-            'name.unique' => 'Phòng ban này đã tồn tại'
         ];
     }
 }

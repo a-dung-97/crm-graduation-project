@@ -26,7 +26,7 @@ class ContactsResource extends JsonResource
             'created_at' => $this->created_at,
             'customer' => $this->customer->name,
             'position' => $this->position ? $this->position->name : null,
-            'gender' => $this->gender ? 'Nam' : 'Nữ',
+            'gender' =>  $this->gender == 1 ? 'Nam' : ($this->gender == null ? '' : 'Nữ'),
         ];
     }
 }

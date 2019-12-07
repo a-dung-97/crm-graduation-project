@@ -27,7 +27,7 @@ class ContactRequest extends FormRequest
             'last_name' => 'required',
             'customer_id' => 'required',
             'ownerable_id' => "required",
-            'email' => 'unique:contacts,email,' . $this->id . ',id',
+            'email' => $this->email ? 'unique:contacts,email,' . $this->id . ',id' : '',
             'phone_number' => $this->phone_number ? 'unique:contacts,phone_number,' . $this->id . ',id' : '',
             'mobile_number' => $this->mobile_number ? 'unique:contacts,mobile_number,' . $this->id . ',id' : ''
 

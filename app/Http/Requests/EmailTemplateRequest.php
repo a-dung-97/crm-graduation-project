@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LeadRequest extends FormRequest
+class EmailTemplateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,17 +24,13 @@ class LeadRequest extends FormRequest
     public function rules()
     {
         return [
-            'last_name' => 'required',
-            'email' => 'unique:leads,email,' . $this->id . ',id',
-            'phone_number' => $this->phone_number ? 'unique:leads,phone_number,' . $this->id . ',id' : ''
+            'name' => 'required|unique:email_templates,name,' . $this->id . ',id'
         ];
     }
     public function messages()
     {
         return [
-            'email.unique' => 'Địa chỉ email đã tồn tại',
-            'phone_number.unique' => 'Số điện thoại đã tồn tại'
-
+            'name.unique' => 'Tên mẫu này đã tồn tại'
         ];
     }
 }

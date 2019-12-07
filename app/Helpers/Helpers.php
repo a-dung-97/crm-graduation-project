@@ -94,14 +94,14 @@ function convertModelToType($value)
 function convertTypeToModel($value)
 {
     switch ($value) {
-        case 'App\Product':
-            return 'Sản phẩm';
+        case 'Sản phẩm':
+            return 'App\Product';
             break;
-        case 'App\Customer':
-            return 'Khách hàng';
+        case 'Khách hàng':
+            return 'App\Customer';
             break;
-        case 'App\Lead':
-            return 'Tiềm năng';
+        case 'Tiềm năng':
+            return 'App\Lead';
             break;
         case 'App\Contact':
             return 'Liên hệ';

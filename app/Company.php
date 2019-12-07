@@ -112,4 +112,12 @@ class Company extends Model
     {
         return $this->hasMany('App\MailingList');
     }
+    public function emailTemplates()
+    {
+        return $this->hasMany('App\EmailTemplate');
+    }
+    public function emailCampaigns()
+    {
+        return $this->hasMany('App\EmailCampaign');
+    }
 }

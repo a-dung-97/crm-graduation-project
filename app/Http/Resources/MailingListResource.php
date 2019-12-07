@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MailingListsResource extends JsonResource
+class MailingListResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +15,10 @@ class MailingListsResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'count' => $this->leads_count + $this->contacts_count + $this->customers_count,
-            'description' => $this->description,
-            'created_at' => $this->created_at,
+            'id' => $this->listable->id,
+            'type' => $this->listable_type,
+            'email' => $this->listable->email,
+            'name' => $this->listable->name,
         ];
     }
 }

@@ -19,3 +19,5 @@ Route::get('/confirm-email/{email_token}', 'EmailAddressController@verify')->nam
 
 Route::get('invite/{invite_code}', 'UserController@comfirmInvitationEmail')->name('invite');
 Route::post('invite/{invite_code}', 'UserController@acceptInvitation');
+
+Route::get('test-send', 'EmailCampaignController@send');

@@ -2,10 +2,12 @@
 
 namespace App;
 
+use App\Scopes\CompanyScope;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -98,5 +100,10 @@ class User extends Authenticatable implements JWTSubject
     public function emailAddresses()
     {
         return $this->hasMany('App\EmailAddress');
+    }
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new CompanyScope);
     }
 }
