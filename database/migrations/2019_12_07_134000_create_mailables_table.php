@@ -14,13 +14,16 @@ class CreateMailablesTable extends Migration
     public function up()
     {
         Schema::create('mailables', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('email_id');
             $table->foreign('email_id')->references('id')->on('emails');
             $table->morphs('mailable');
             $table->boolean('clicked')->default(false);
             $table->boolean('opened')->default(false);
-            $table->boolean('deliveried')->default(false);
+            $table->boolean('delivered')->default(false);
             $table->boolean('failed')->default(false);
+            $table->boolean('unsubscribed')->default(false);
+            $table->boolean('complained')->default(false);
         });
     }
 

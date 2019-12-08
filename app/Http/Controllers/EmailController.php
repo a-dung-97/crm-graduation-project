@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Email;
+use App\Http\Requests\MailRequest;
+use App\Http\Resources\EmailsResource;
+use App\Jobs\SendEmailToCustomer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class EmailController extends Controller
 {
@@ -12,74 +16,28 @@ class EmailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->query('perPage', 10);
+        $type = $request->query('type');
+        $id = $request->query('id');
+        $model = getModel($type, $id);
+        if ($type && $id)
+            return EmailsResource::collection($model->emails()->with('mailable:id,name')->paginate($perPage))->additional([
+                'recipient' => [
+                    'name' => $model->name,
+                    'email' => $model->email
+                ]
+            ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(MailRequest $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Email  $email
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Email $email)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Email  $email
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Email $email)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Email  $email
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Email $email)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Email  $email
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Email $email)
-    {
-        //
+        $data = Arr::except($request->all(), ['type', 'id']);
+        $email = Email::create($data);
+        $model = getModel($request->type, $request->id);
+        $model->emails()->attach($email->id);
+        $data = array_merge($data, ['email' => $model->email, 'name' => $model->name]);
+        SendEmailToCustomer::dispatch($data, $email);
+        return created();
     }
 }

@@ -12,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class BatchSending implements ShouldQueue
+class SendEmailToCustomer implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -21,16 +21,13 @@ class BatchSending implements ShouldQueue
      *
      * @return void
      */
-    protected $list;
     protected $info;
     protected $email;
-    public function __construct($list, $info, Email $email)
+    public function __construct($info, Email $email)
     {
-        $this->list = $list;
         $this->info = $info;
         $this->email = $email;
     }
-
     /**
      * Execute the job.
      *
@@ -39,27 +36,10 @@ class BatchSending implements ShouldQueue
     public function handle()
     {
         $info = $this->info;
-        $list = $this->list->keyBy('email')->map(function ($item) {
-            return  collect($item)->keyBy(function ($val, $key) use ($item) {
-                switch ($item['type']) {
-                    case 'App\Lead':
-                        return 'lead_' . $key;
-                        break;
-                    case 'App\Customer':
-                        return 'customer_' . $key;
-                        break;
-                    case 'App\Contact':
-                        return 'contact_' . $key;
-                        break;
-                    default:
-                        break;
-                }
-            });
-        })->toArray();
-        $response = Mailgun::send('mail.send', ['template' => $info['content']], function (Message $message) use ($info, $list) {
+        $response = Mailgun::send('mail.send', ['template' => $info['content']], function (Message $message) use ($info) {
             $message->from($info['from_email'], $info['from_name']);
             $message->subject($info['subject']);
-            $message->to($list);
+            $message->to($info['email'], $info['name']);
         });
         $messageId = rtrim(ltrim($response->id, '<'), '>');
         $this->email->update(['status' => 2, 'message_id' => $messageId]);

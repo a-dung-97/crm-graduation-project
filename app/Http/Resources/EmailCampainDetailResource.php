@@ -20,8 +20,10 @@ class EmailCampainDetailResource extends JsonResource
             'email' => $this->mailable->email,
             'clicked' => $this->clicked,
             'opened' => $this->opened,
-            'deliveried' => $this->deliveried,
+            'delivered' => $this->delivered,
             'failed' => $this->failed,
+            'unsubscribed' => $this->unsubscribed,
+            'complained' => $this->complained,
         ];
     }
 }

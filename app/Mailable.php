@@ -8,7 +8,7 @@ class Mailable extends Model
 {
     protected $guarded = [];
     public $timestamps = false;
-    public function mailables()
+    public function mailable()
     {
         return $this->morphTo('mailable');
     }

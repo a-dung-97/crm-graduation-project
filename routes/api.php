@@ -110,8 +110,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('mailing-lists', 'MailingListController');
     Route::apiResource('lead-score-rules', 'LeadScoreRuleController');
     Route::apiResource('email-templates', 'EmailTemplateController');
+    Route::apiResource('emails', 'EmailController', ['only' => ['index', 'store']]);
+    Route::get('email-campaigns/{email_campaign}/list', 'EmailCampaignController@getListEmail');
     Route::apiResource('email-campaigns', 'EmailCampaignController', ['except' => 'update']);
 });
 Route::post('tracking', 'MailController@tracking');
-
+Route::post('test', 'TestController@test');
 Route::get('test/{lead}', 'LeadScoreRuleController@test');
+
+//Webhooks
+
+
+Route::group(['prefix' => 'webhooks'], function () {
+    Route::group(['prefix' => 'mailgun'], function () {
+        Route::post('tracking', 'MailgunWebhookController@handle');
+    });
+});

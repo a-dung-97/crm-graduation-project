@@ -12,6 +12,7 @@ use App\Mailable;
 use Bogardo\Mailgun\Facades\Mailgun;
 use Illuminate\Http\Request;
 use Bogardo\Mailgun\Mail\Message;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 
 class EmailCampaignController extends Controller
@@ -31,8 +32,19 @@ class EmailCampaignController extends Controller
     }
     public function show(EmailCampaign $emailCampaign)
     {
-        $emailCampaign = new EmailCampaignsResource($emailCampaign);
-        return  $emailCampaign->additional(['detail' => EmailCampainDetailResource::collection($emailCampaign->email->related()->with('mailables:id,name,email')->get())]);
+        return  new EmailCampaignsResource($emailCampaign);
+    }
+    public function getListEmail(Request $request, EmailCampaign $emailCampaign)
+    {
+        $perPage = $request->query('perPage', 10);
+        $search = $request->query('search');
+        $event = $request->query('event');
+        $query = $emailCampaign->email->related()
+            ->whereHasMorph('mailable', ['App\Lead', 'App\Customer', 'App\Contact'], function (Builder $query) use ($search) {
+                if ($search) $query->where('email', 'like', "%{$search}%")->orWhere('name', 'like', "%{$search}%");
+            });
+        if ($event) $query->where($event, 1);
+        return EmailCampainDetailResource::collection($query->with('mailable:id,name,email')->paginate($perPage));
     }
     public function store(EmailCampaignRequest $request)
     {

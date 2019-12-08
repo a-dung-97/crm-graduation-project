@@ -74,8 +74,8 @@ class Contact extends Model
     {
         return $this->morphToMany('App\MailingList', 'listable', 'mailing_listables');
     }
-    public function email()
+    public function emails()
     {
-        return $this->morphToMany('App\Email', 'mailable');
+        return $this->morphToMany('App\Email', 'mailable')->as('detail')->withPivot('clicked', 'opened', 'delivered');
     }
 }
