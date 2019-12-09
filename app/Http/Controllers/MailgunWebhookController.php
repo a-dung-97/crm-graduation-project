@@ -22,7 +22,7 @@ class MailgunWebhookController extends Controller
         $recipient = $data['recipient'];
         $event = $data['event'];
         $email = Email::whereMessageId($messageId)->first();
-        return EmailAddress::whereEmail($email['from_email'])->first()->user;
+        //return EmailAddress::whereEmail($email['from_email'])->first()->user;
         if ($email) {
             $email->related()
                 ->whereHasMorph('mailable', ['App\Lead', 'App\Customer', 'App\Contact'], function (Builder $query) use ($recipient) {
