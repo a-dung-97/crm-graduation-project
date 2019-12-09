@@ -11,6 +11,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\User::class, 1000)->create();
+        Catalog::create(['name' => 'Khách hàng']);
+        Catalog::create(['name' => 'Liên hệ']);
+        Catalog::create(['name' => 'Cơ hội']);
+        Catalog::create(['name' => 'Hóa đơn']);
+        Catalog::create(['name' => 'Tiềm năng']);
+        Catalog::create(['name' => 'Đơn hàng']);
+        Catalog::create(['name' => 'Báo giá']);
     }
 }

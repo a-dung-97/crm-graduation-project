@@ -13,7 +13,7 @@ class CatalogSeeder extends Seeder
 
     public static function run($id)
     {
-        $customer = Catalog::create(['name' => 'Khách hàng']);
+        $customer = Catalog::where(['name' => 'Khách hàng'])->first();
         $customer->catalogs()->create(['name' => 'Loại'])->catalogs()->createMany([
             ['name' => 'Khách hàng cá nhân', 'description' => 'Khách hàng cá nhân', 'company_id' => $id],
             ['name' => 'Tổ chức', 'description' => 'Tổ chức', 'company_id' => $id],
@@ -41,7 +41,7 @@ class CatalogSeeder extends Seeder
 
 
 
-        $contact = Catalog::create(['name' => 'Liên hệ']);
+        $contact = Catalog::where(['name' => 'Liên hệ'])->first();
         $contact->catalogs()->create(['name' => 'Chức vụ'])->catalogs()->createMany([
             ['name' => 'Cộng tác viên', 'description' => 'Cộng tác viên', 'company_id' => $id],
             ['name' => 'Nhân viên', 'description' => 'Nhân viên', 'company_id' => $id],
@@ -58,7 +58,7 @@ class CatalogSeeder extends Seeder
         ]);
 
         // ['name' => '', 'description' => '', 'company_id' => $id],
-        $opportunity = Catalog::create(['name' => 'Cơ hội']);
+        $opportunity = Catalog::where(['name' => 'Cơ hội'])->first();
         $opportunity->catalogs()->create(['name' => 'Kiểu'])->catalogs()->createMany([
             ['name' => 'Kinh doanh hiện thời', 'description' => 'Kinh doanh hiện thời', 'company_id' => $id],
             ['name' => 'Kinh doanh mới', 'description' => 'Kinh doanh mới', 'company_id' => $id],
@@ -92,11 +92,11 @@ class CatalogSeeder extends Seeder
 
 
 
-        $bill = Catalog::create(['name' => 'Hóa đơn']);
+        $bill = Catalog::where(['name' => 'Hóa đơn'])->first();
         $bill->catalogs()->create(['name' => 'Trạng thái']);
 
 
-        $lead = Catalog::create(['name' => 'Tiềm năng']);
+        $lead = Catalog::where(['name' => 'Tiềm năng'])->first();
         $lead->catalogs()->create(['name' => 'Nguồn'])->catalogs()->createMany([
             ['name' => 'Webform', 'description' => 'Webform', 'company_id' => $id],
             ['name' => 'Facebook', 'description' => 'Facebook', 'company_id' => $id],
@@ -128,7 +128,7 @@ class CatalogSeeder extends Seeder
 
 
 
-        $order = Catalog::create(['name' => 'Đơn hàng']);
+        $order = Catalog::where(['name' => 'Đơn hàng'])->first();
         $order->catalogs()->create(['name' => 'Trạng thái'])->catalogs()->createMany([
             ['name' => 'Giao hàng', 'description' => 'Giao hàng', 'company_id' => $id],
             ['name' => 'Đã hủy', 'description' => 'Đã hủy', 'company_id' => $id],
@@ -136,7 +136,7 @@ class CatalogSeeder extends Seeder
             ['name' => 'Được tạo', 'description' => 'Được tạo', 'company_id' => $id],
         ]);
 
-        $quote = Catalog::create(['name' => 'Báo giá']);
+        $quote = Catalog::where(['name' => 'Báo giá'])->first();
         $quote->catalogs()->create(['name' => 'Trạng thái'])->catalogs()->createMany([
             ['name' => 'Giao hàng', 'description' => 'Giao hàng', 'company_id' => $id],
             ['name' => 'Đã hủy', 'description' => 'Đã hủy', 'company_id' => $id],
