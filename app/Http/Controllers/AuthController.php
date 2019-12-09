@@ -68,7 +68,7 @@ class AuthController extends Controller
     {
         $newEmailToken = Str::random(60);
         $user->update(['email_token' => $newEmailToken]);
-        Mail::to($user)->send(new VerifyEmail($newEmailToken));
+        Mail::to($user)->queue(new VerifyEmail($newEmailToken));
         return response(['message' => 'Gửi lại email kích hoạt thành công'], Response::HTTP_OK);
     }
     public function login(LoginRequest $request)
