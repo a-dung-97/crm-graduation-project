@@ -18,7 +18,7 @@ class CompanyScope implements Scope
     protected $company;
     public function __construct()
     {
-        if (user()) {
+        if (user() && company()) {
             $this->company = company()->id;
         }
     }
