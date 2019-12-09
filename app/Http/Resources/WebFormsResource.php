@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class EmailTemplatesResource extends JsonResource
+class WebFormsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +17,8 @@ class EmailTemplatesResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'campaign' => $this->campaign,
             'created_at' => $this->created_at,
-            'description' => $this->description,
-            'content' => $this->content,
-            'user' => $this->user->name,
         ];
     }
 }

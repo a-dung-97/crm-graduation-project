@@ -48,7 +48,8 @@ class Lead extends Model
     {
         parent::boot();
         static::creating(function ($model) {
-            $model->created_by = user()->id;
+            if (user())
+                $model->created_by = user()->id;
         });
         static::updating(function ($model) {
             $model->updated_by = user()->id;

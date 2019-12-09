@@ -120,4 +120,8 @@ class Company extends Model
     {
         return $this->hasMany('App\EmailCampaign');
     }
+    public function webforms()
+    {
+        return $this->hasMany('App\Webform');
+    }
 }

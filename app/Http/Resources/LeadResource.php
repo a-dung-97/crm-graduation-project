@@ -40,7 +40,7 @@ class LeadResource extends JsonResource
             'description' => $this->description,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_by ? $this->updated_at : null,
-            'created_by' => $this->createdBy->name,
+            'created_by' => $this->created_by ? $this->createdBy->name : null,
             'updated_by' => $this->updatedBy ? $this->updatedBy->name : null,
         ];
     }

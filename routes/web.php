@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/home', function () {
     return view('welcome');
 });
 Route::get('/verify-email/{email_token}', 'AuthController@verifyEmail')->name('verify-email');

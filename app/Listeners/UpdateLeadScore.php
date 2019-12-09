@@ -2,9 +2,11 @@
 
 namespace App\Listeners;
 
+use App\Company;
 use App\Events\LeadOrRulesChanged;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
 
 class UpdateLeadScore
 {
@@ -35,7 +37,7 @@ class UpdateLeadScore
     private function updateScore($lead, $updateAll)
     {
         $score = 0;
-        $rules = company()->leadScoreRules;
+        $rules = Company::find($lead->company_id)->leadScoreRules;
         foreach ($rules as $rule) {
             $curentValue = $lead[$this->convertField($rule['field'])];
             if ($this->compare($curentValue, $rule['condition'], $rule['value'])) {
