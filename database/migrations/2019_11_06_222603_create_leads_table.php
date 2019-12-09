@@ -47,7 +47,7 @@ class CreateLeadsTable extends Migration
             // $table->morphs('ownerable');
 
             $table->morphs('ownerable');
-
+            $table->boolean('converted')->default(false);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->foreign('created_by')->references('id')->on('users');
             $table->unsignedBigInteger('updated_by')->nullable();
