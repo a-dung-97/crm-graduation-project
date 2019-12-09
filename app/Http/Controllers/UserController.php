@@ -61,7 +61,7 @@ class UserController extends Controller
         $this->user->invitations()->create($data);
 
         Mailgun::send('mail.invitation', ['name' => $this->user->name, 'code' => $data['invite_code']], function ($message) use ($request) {
-            $message->from('noreply@crm.adung.software', 'Anh Dũng')->to($request->email)->subject('Lời mời tham gia ADCRM!');
+            $message->from('noreply@crm.adung.software', user()->name)->to($request->email)->subject('Lời mời tham gia ADCRM!');
         });
         //Mailgun::api()
         //Mail::to($request->email)->queue(new InvitationEmail($this->user->name,  $data['invite_code']));
