@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EmailAddressRequest extends FormRequest
@@ -29,8 +30,6 @@ class EmailAddressRequest extends FormRequest
     }
     public function messages()
     {
-        return [
-            'email.unique' => 'Địa chỉ email đã tồn tại'
-        ];
+        return ['email.unique' => 'Email đã tồn tại'];
     }
 }

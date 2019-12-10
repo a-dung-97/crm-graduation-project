@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RoleRequest extends FormRequest
@@ -25,7 +26,7 @@ class RoleRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            "code" => "required|unique:roles,code," . $this->id . ',id'
+            'code' => ['required', new Unique('roles', 'code', $this->id)]
         ];
     }
     public function messages()

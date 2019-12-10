@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class IssueRequest extends FormRequest
@@ -24,7 +25,7 @@ class IssueRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|unique:issues,code,' . $this->id . ',id',
+            'code' => ['required', new Unique('issues', 'code', $this->id)],
             'date' => 'required|date',
             'products' => 'required',
             'products.*.product_id' => 'required',

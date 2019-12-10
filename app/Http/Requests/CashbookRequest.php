@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CashbookRequest extends FormRequest
@@ -25,7 +26,7 @@ class CashbookRequest extends FormRequest
     {
         return [
             'type' => 'required',
-            'name' =>  'required|unique:cashbooks,name,' . $this->id . ',id',
+            'name' => ['required', new Unique('cashbooks', 'name', $this->id)]
         ];
     }
     public function messages()

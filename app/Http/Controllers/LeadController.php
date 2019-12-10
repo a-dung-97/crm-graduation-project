@@ -190,6 +190,7 @@ class LeadController extends Controller
                 company()->opportunities()->create($request);
             }
             $lead->update(['converted' => true]);
+            $lead->tasks()->delete();
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();

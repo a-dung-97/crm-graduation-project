@@ -103,6 +103,9 @@ class CustomerController extends Controller
             case 'quote':
                 return QuotesResource::collection($customer->quotes()->paginate($request->query('perPage', 10)));
                 break;
+            case 'contact':
+                return QuotesResource::collection($customer->contacts()->paginate($request->query('perPage', 10)));
+                break;
             default:
                 return OrdersResource::collection($customer->orders()->paginate($request->query('perPage', 10)));
                 break;

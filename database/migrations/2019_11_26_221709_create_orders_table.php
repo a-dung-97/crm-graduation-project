@@ -28,6 +28,7 @@ class CreateOrdersTable extends Migration
             $table->string('payment_method')->nullable();
             $table->string('delivery_method')->nullable();
             $table->date('order_date');
+            $table->decimal('shipping_fee', 15, 2)->default(0);
             $table->date('delivery_date')->nullable();
             $table->string('delivery_address')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();

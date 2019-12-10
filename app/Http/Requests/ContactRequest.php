@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ContactRequest extends FormRequest
@@ -27,19 +28,14 @@ class ContactRequest extends FormRequest
             'last_name' => 'required',
             'customer_id' => 'required',
             'ownerable_id' => "required",
-            'email' => $this->email ? 'unique:contacts,email,' . $this->id . ',id' : '',
-            'phone_number' => $this->phone_number ? 'unique:contacts,phone_number,' . $this->id . ',id' : '',
-            'mobile_number' => $this->mobile_number ? 'unique:contacts,mobile_number,' . $this->id . ',id' : ''
+            'email' => new Unique('contacts', 'email', $this->id),
+            'phone_number' => new Unique('contacts', 'email', $this->id),
+            'mobile_number' =>  new Unique('contacts', 'email', $this->id)
 
         ];
     }
     public function messages()
     {
-        return [
-
-            'email.unique' => 'Địa chỉ email đã tồn tại',
-            'phone_number.unique' => 'Số điện thoại đã tồn tại',
-            'mobile_number.unique' => 'Số di động đã tồn tại'
-        ];
+        return [];
     }
 }

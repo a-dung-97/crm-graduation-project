@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GroupRequest extends FormRequest
@@ -24,7 +25,7 @@ class GroupRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required|unique:groups,name," . $this->id . ',id'
+            'name' => ['required', new Unique('groups', 'name', $this->id)]
         ];
     }
     public function messages()

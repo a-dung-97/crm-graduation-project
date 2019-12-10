@@ -12,7 +12,8 @@
 */
 
 Route::get('/home', function () {
-    return view('welcome');
+    $quote = App\Order::find(1);
+    return new App\Mail\OrderEmail($quote);
 });
 Route::get('/verify-email/{email_token}', 'AuthController@verifyEmail')->name('verify-email');
 Route::get('/confirm-email/{email_token}', 'EmailAddressController@verify')->name('confirm-email');

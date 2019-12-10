@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class InvoiceRequest extends FormRequest
@@ -25,7 +26,7 @@ class InvoiceRequest extends FormRequest
     {
         return [
             'ownerable_id' => 'required',
-            'code' => 'required|unique:invoices,code,' . $this->id . ',id',
+            'code' => ['required', new Unique('invoices', 'code', $this->id)],
             'order_id' => 'required',
             'customer' => 'required',
             'payment_method' => 'required',

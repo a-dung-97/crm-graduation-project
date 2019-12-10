@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MailingListRequest extends FormRequest
@@ -24,7 +25,7 @@ class MailingListRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:mailing_lists,name,' . $this->id . ',id'
+            'name' => ['required', new Unique('mailing_lists', 'name', $this->id)]
         ];
     }
     public function messages()

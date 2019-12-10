@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProductRequest extends FormRequest
@@ -25,7 +26,7 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => "required",
-            'code' => 'required|unique:products,code,' . $this->id . ',id'
+            'code' => ['required', new Unique('products', 'code', $this->id)]
         ];
     }
     public function messages()

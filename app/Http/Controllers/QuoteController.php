@@ -8,9 +8,11 @@ use App\Http\Resources\ProductQuoteResource;
 use App\Http\Resources\QuoteListResource;
 use App\Http\Resources\QuoteResource;
 use App\Http\Resources\QuotesResource;
+use App\Mail\QuoteEmail;
 use App\Quote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Mail;
 
 class QuoteController extends Controller
 {
@@ -101,5 +103,10 @@ class QuoteController extends Controller
     public function getOrders(Quote $quote)
     {
         return OrdersResource::collection($quote->orders);
+    }
+    public function sendQuote(Quote $quote)
+    {
+        $customer = $quote->customer;
+        return ['data' => ['content' => (new QuoteEmail($quote))->render(), 'customer_id' => $customer->id, 'email' => $customer->email]];
     }
 }

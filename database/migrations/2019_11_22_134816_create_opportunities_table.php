@@ -24,7 +24,7 @@ class CreateOpportunitiesTable extends Migration
             $table->unsignedBigInteger('source_id')->nullable();;
             $table->foreign('source_id')->references('id')->on('catalogs');
             $table->string('next_step')->nullable();
-            $table->decimal('probability_of_success', 3, 2);
+            $table->decimal('probability_of_success', 5, 2);
             $table->decimal('value', 15, 0)->nullable();
             $table->decimal('expected_sales', 15, 0)->nullable();
             $table->text('description')->nullable();

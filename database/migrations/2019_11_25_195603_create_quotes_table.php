@@ -31,8 +31,9 @@ class CreateQuotesTable extends Migration
             $table->text('note')->nullable();
             $table->text('license_and_conditions')->nullable();
             $table->text('transport')->nullable();
+            $table->decimal('shipping_fee', 15, 2)->default(0);
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('status_id');
+            $table->unsignedBigInteger('status_id')->nullable();
             $table->foreign('status_id')->references('id')->on('catalogs');
             $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');

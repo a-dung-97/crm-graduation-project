@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerRequest extends FormRequest
@@ -26,10 +27,10 @@ class CustomerRequest extends FormRequest
         return [
             'ownerable_id' => 'required',
             'name' => 'required',
-            'code' => 'required|unique:customers,code,' . $this->id . ',id',
-            'email' => $this->email ? 'unique:customers,email,' . $this->id . ',id' : '',
-            'phone_number' => $this->phone_number ? 'unique:customers,phone_number,' . $this->id . ',id' : '',
-            'mobile_number' => $this->mobile_number ? 'unique:customers,mobile_number,' . $this->id . ',id' : ''
+            'code' => ['required', new Unique('customers', 'code', $this->id)],
+            'email' =>  new Unique('customers', 'email', $this->id),
+            'phone_number' =>  new Unique('customers', 'phone_number', $this->id),
+            'mobile_number' =>  new Unique('customers', 'mobile_number', $this->id)
         ];
     }
     public function messages()

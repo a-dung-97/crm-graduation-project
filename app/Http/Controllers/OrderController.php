@@ -10,6 +10,7 @@ use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrdersResource;
 use App\Http\Resources\ProductQuoteResource;
 use App\Http\Resources\QuotesResource;
+use App\Mail\OrderEmail;
 use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -104,5 +105,9 @@ class OrderController extends Controller
     public function getInvoices(Order $order)
     {
         return InvoicesResource::collection($order->invoices);
+    }
+    public function sendOrder(Order $order)
+    {
+        return ['data' => ['content' => (new OrderEmail($order))->render()]];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ReceiptRequest extends FormRequest
@@ -24,7 +25,7 @@ class ReceiptRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|unique:receipts,code,' . $this->id . ',id',
+            'code' => ['required', new Unique('receipts', 'code', $this->id)],
             'date' => 'required|date',
             'products' => 'required',
             'products.*.product_id' => 'required',

@@ -16,7 +16,7 @@ class Unique implements Rule
     protected $id;
     protected $company;
     protected $column;
-    public function __construct($table, $column, $id)
+    public function __construct($table, $column, $id = "")
     {
         $this->table = $table;
         $this->id = $id;
@@ -33,6 +33,7 @@ class Unique implements Rule
      */
     public function passes($attribute, $value)
     {
+        if (!$value) return true;
         $query = DB::table($this->table)->where($this->column, $value)->where('company_id', $this->company);
         if ($this->id) $query = $query->where('id', '<>', $this->id);
         $query = $query->first();
@@ -47,6 +48,26 @@ class Unique implements Rule
      */
     public function message()
     {
-        return 'Tên này đã tồn tại';
+        $name = '';
+        switch ($this->column) {
+            case 'name':
+                $name = "Tên";
+                break;
+            case 'code':
+                $name = "Mã";
+                break;
+            case 'phone_number':
+                $name = "Số điện thoại";
+                break;
+            case 'mobile_number':
+                $name = "Số di động";
+                break;
+            case 'email':
+                $name = "Email";
+                break;
+            default:
+                break;
+        }
+        return $name . ' đã tồn tại';
     }
 }

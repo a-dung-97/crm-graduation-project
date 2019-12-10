@@ -8,6 +8,7 @@ use App\Http\Requests\InvitationRequest;
 use App\Http\Resources\UserResource;
 use App\Invitation;
 use App\Mail\InvitationEmail;
+use App\Scopes\CompanyScope;
 use App\User;
 use Bogardo\Mailgun\Facades\Mailgun;
 use Illuminate\Http\Request;
@@ -52,8 +53,7 @@ class UserController extends Controller
     }
     public function inviteUser(InvitationRequest $request)
     {
-
-        if (User::where('email', $request->email)->whereNotNull('company_id')->where('active', true)->first())
+        if (User::withoutGlobalScope(CompanyScope::class)->where('email', $request->email)->whereNotNull('company_id')->where('active', true)->first())
             return response(['message' => 'Email này đã tồn tại ở công ty khác'], 400);
         $data = $request->all();
         $data['invite_code'] = Str::random(60);

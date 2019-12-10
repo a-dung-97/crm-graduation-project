@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class OrderRequest extends FormRequest
@@ -24,7 +25,7 @@ class OrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|unique:orders,code,' . $this->id . ',id',
+            'code' => ['required', new Unique('orders', 'code', $this->id)],
             'customer_id' => 'required',
             'ownerable_id' => "required",
             'order_date' => 'required|date',

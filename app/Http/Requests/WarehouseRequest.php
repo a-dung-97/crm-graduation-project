@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class WarehouseRequest extends FormRequest
@@ -24,7 +25,7 @@ class WarehouseRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:warehouses,name,' . $this->id . ',id'
+            'name' => ['required', new Unique('warehouses', 'name', $this->id)]
         ];
     }
 }

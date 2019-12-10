@@ -24,10 +24,10 @@ class TaskResource extends JsonResource
             'finish_date' => $this->finish_date,
             'priority' => $this->convertPriority($this->priority),
             'description' => $this->description,
-            'taskable' => [
+            'taskable' => $this->taskable_type && $this->taskable_id ? [
                 'type' => $this->taskable_type,
                 'detail' => $this->taskable()->select('id', 'name', 'email', 'phone_number', 'mobile_number')->first()
-            ],
+            ] : null,
             'contact' => $this->contact()->select('id', 'name', 'email', 'phone_number', 'mobile_number')->first(),
             'reminder' => [
                 'time' => $this->reminder_time,

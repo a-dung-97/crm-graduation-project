@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LeadRequest extends FormRequest
@@ -25,17 +26,15 @@ class LeadRequest extends FormRequest
     {
         return [
             'last_name' => 'required',
-            'email' => 'unique:leads,email,' . $this->id . ',id',
-            'phone_number' => $this->phone_number ? 'unique:leads,phone_number,' . $this->id . ',id' : '',
-            'mobile_number' => $this->mobile_number ? 'unique:leads,mobile_number,' . $this->id . ',id' : '',
+            'email' => new Unique('leads', 'email', $this->id),
+            'phone_number' => new Unique('leads', 'phone_number', $this->id),
+            'mobile_number' => new Unique('leads', 'mobile_number', $this->id),
         ];
     }
     public function messages()
     {
         return [
             'email.unique' => 'Địa chỉ email đã tồn tại',
-            'phone_number.unique' => 'Số điện thoại đã tồn tại',
-            'mobile_number.unique' => 'Số di động đã tồn tại'
         ];
     }
 }

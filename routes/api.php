@@ -88,6 +88,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('contacts', 'ContactController');
     Route::apiResource('opportunities', 'OpportunityController');
 
+    Route::get('orders/{order}/send', 'OrderController@sendOrder');
+    Route::get('quotes/{quote}/send', 'QuoteController@sendQuote');
     Route::get('quotes/{quote}/order', 'QuoteController@getOrders');
     Route::get('orders/{order}/invoice', 'OrderController@getInvoices');
     Route::apiResource('quotes', 'QuoteController');

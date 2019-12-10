@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Unique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class QuoteRequest extends FormRequest
@@ -24,7 +25,7 @@ class QuoteRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|unique:quotes,code,' . $this->id . ',id',
+            'code' => ['required', new Unique('quotes', 'code', $this->id)],
             'customer_id' => 'required',
             'ownerable_id' => "required",
             'quote_date' => 'required|date',
