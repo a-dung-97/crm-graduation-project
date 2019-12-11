@@ -15,7 +15,7 @@ class CreateLeadScoreRulesTable extends Migration
     {
         Schema::create('lead_score_rules', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('rule');
+            $table->string('field');
             $table->string('condition');
             $table->string('value')->nullable();
             $table->boolean('action');
