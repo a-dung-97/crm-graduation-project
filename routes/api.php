@@ -22,6 +22,9 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
+    Route::get('password/reset', 'AuthController@sendEmailResetPassword');
+    Route::post('password/reset', 'AuthController@resetPassword');
+    Route::post('password/change', 'AuthController@changePassword');
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -59,9 +62,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('files', 'FileController', ['only' => ['destroy']]);
 
     Route::get('tags', 'TagController@index');
-    Route::put('tags/{type}/{id}', 'TagController@changeTags');
+    Route::put('tags/{type}', 'TagController@changeTags');
     Route::get('tags/{type}/{id}', 'TagController@getTags');
-    Route::delete('tags/{type}/{id}', 'TagController@deleteTag');
+    Route::delete('tags/{type}', 'TagController@deleteTag');
 
 
 

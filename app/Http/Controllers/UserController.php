@@ -59,12 +59,7 @@ class UserController extends Controller
         $data['invite_code'] = Str::random(60);
         $data['expired_at'] = Carbon::now()->addDay()->toDateTimeString();
         $this->user->invitations()->create($data);
-
-        Mailgun::send('mail.invitation', ['name' => $this->user->name, 'code' => $data['invite_code']], function ($message) use ($request) {
-            $message->from('noreply@crm.adung.software', user()->name)->to($request->email)->subject('Lời mời tham gia ADCRM!');
-        });
-        //Mailgun::api()
-        //Mail::to($request->email)->queue(new InvitationEmail($this->user->name,  $data['invite_code']));
+        Mail::to($request->email)->queue(new InvitationEmail($this->user->name,  $data['invite_code']));
         return ['message' => 'Gửi lời mời thành công'];
     }
     public function comfirmInvitationEmail($inviteCode)

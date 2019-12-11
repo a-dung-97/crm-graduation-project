@@ -5,16 +5,22 @@ namespace App\Http\Controllers;
 use App\Company;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\CompanyRequest;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\PasswordResetRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Mail\PasswordReset;
 use App\Mail\VerifyEmail;
+use App\Scopes\CompanyScope;
 use App\Services\TinyDrive;
 use App\User;
 use Carbon\Carbon;
 use CatalogSeeder;
 use Firebase\JWT\JWT;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -29,7 +35,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'verifyEmail', 'resendVerifyEmail']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'verifyEmail', 'resendVerifyEmail', 'sendEmailResetPassword', 'resetPassword']]);
     }
 
     /**
@@ -152,13 +158,33 @@ class AuthController extends Controller
         auth()->user()->update(['company_id' => $company->id, 'position_id' => $firstPosition->id, 'role_id' => $firstRole->id, 'department_id' => $firstDepartment->id]);
         return response('created', Response::HTTP_CREATED);
     }
-    private function generateTinyProviderToken($user)
+    public function sendEmailResetPassword(Request $request)
     {
-        $payload = array(
-            "sub" => $user->id, // unique user id string
-            "name" => $user->name, // full name of user
-            "exp" => time() + 60 * 60 * 24, // 10 minute expiration
-            "https://claims.tiny.cloud/drive/root" => "/" + $user->id,
-        );
+        $email = $request->query('email');
+        if (!$email) return error('Bạn chưa nhập email');
+        $user = User::withoutGlobalScope(CompanyScope::class)->where('email', $email)->first();
+        if (!$user) return error('Không tồn tại email này');
+        $code = mt_rand(100000, 999999);
+        DB::table('password_resets')->insert([
+            'user_id' => $user->id,
+            'confirm_code' => $code,
+            'expired_at' => Carbon::now()->addMinutes(5),
+        ]);
+        Mail::to($user)->queue(new PasswordReset($code));
+        return ['message' => 'OK'];
+    }
+    public function resetPassword(PasswordResetRequest $request)
+    {
+        $reset = DB::table('password_resets')->where('confirm_code', $request->confirm_code)->whereTime('expired_at', '<', Carbon::now()->toDateTimeString())->first();
+        if (!$reset) return error('Mã xác nhận không đúng hoặc đã hết hạn');
+        User::find($reset->user_id)->update(['password' => Hash::make($request->password)]);
+        return ['message' => 'OK'];
+    }
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        if (!Hash::check($request->old_password, user()->password))
+            return error('Mật khẩu cũ không đúng');
+        user()->update(['password' => Hash::make($request->password)]);
+        return ['message' => 'OK'];
     }
 }

@@ -60,9 +60,35 @@ class EmailCampaignController extends Controller
             'from_name' => $fromName,
             'from_email' => $fromEmail,
         ]);
-        $list = $campaign->mailingList->related()->with('listables')->get()->map(function ($item) {
-            return  collect($item->listable)->merge(['type' => $item->listable_type]);
-        });
+        if ($request->conditional) {
+            $oldCampaign = EmailCampaign::find($request->email_campaign_id);
+            $list = $oldCampaign->email->related();
+            switch ($request->event) {
+                case 'Đã nhận':
+                    $list = $list->where('delivered', true);
+                    break;
+                case 'Đã click':
+                    $list = $list->where('clicked', true);
+                    break;
+                case 'Không click':
+                    $list = $list->where('clicked', false);
+                    break;
+                case 'Đã mở':
+                    $list = $list->where('opened', true);
+                    break;
+                case 'Không mở':
+                    $list = $list->where('opened', false);
+                    break;
+                default:
+                    break;
+            }
+            $list = $list->with('mailable')->get()->map(function ($item) {
+                return  collect($item->mailable)->merge(['type' => $item->mailable_type]);
+            });
+        } else
+            $list = $campaign->mailingList->related()->with('listables')->get()->map(function ($item) {
+                return  collect($item->listable)->merge(['type' => $item->listable_type]);
+            });
         foreach ($list as $item)
             Mailable::create([
                 'email_id' => $email->id,

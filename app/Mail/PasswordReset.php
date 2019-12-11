@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class InvitationEmail extends Mailable
+class PasswordReset extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -16,14 +16,10 @@ class InvitationEmail extends Mailable
      *
      * @return void
      */
-    protected $name;
     protected $code;
-    protected $user;
-    public function __construct($name, $code)
+    public function __construct($code)
     {
-        $this->name = $name;
         $this->code = $code;
-        $this->user = user()->name;
     }
 
     /**
@@ -33,6 +29,6 @@ class InvitationEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Lời mời tham gia ADCRM')->from('noreply@crm.adung.software', $this->user)->view('mail.invitation')->with(['name' => $this->name, 'code' => $this->code]);
+        return  $this->subject('Khôi phục tài khoản ADCRM')->view('auth.password_reset')->with(['code' => $this->code]);
     }
 }

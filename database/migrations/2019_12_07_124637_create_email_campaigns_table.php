@@ -23,7 +23,7 @@ class CreateEmailCampaignsTable extends Migration
             $table->string('conditional')->default(false);
             $table->unsignedBigInteger('email_campaign_id')->nullable();
             $table->foreign('email_campaign_id')->references('id')->on('email_campaigns');
-            $table->enum('event', ['Đã mở', 'Đã click', 'Đã gửi', 'Không mở', 'Không click'])->nullable();
+            $table->enum('event', ['Đã mở', 'Đã click', 'Đã nhận', 'Không mở', 'Không click'])->nullable();
             $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();

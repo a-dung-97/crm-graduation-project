@@ -17,24 +17,32 @@ class TagController extends Controller
     {
         return TagResource::collection(getModel($type, $id)->tags);
     }
-    public function changeTags(Request $request, $type, $id)
+    public function changeTags(Request $request, $type)
     {
-        $tags = $request->all();
+        $tags = $request->tags;
+        $objs = $request->objects;
         $newTags = [];
         foreach ($tags as $tag) {
             $newTag = company()->tags()->where('name', $tag)->first();
             if (!$newTag) {
                 $newTag = company()->tags()->create(['name' => $tag, "type" => $type]);
             }
-            array_push($newTags, $newTag->id);
+            array_push($newTags, $newTag);
         }
-        getModel($type, $id)->tags()->syncWithoutDetaching($newTags);
+        foreach ($newTags as $tag) {
+            if ($type == 'customer') $tag->customers()->syncWithoutDetaching($objs);
+            else $tag->leads()->syncWithoutDetaching($objs);
+        }
         return updated();
     }
-    public function deleteTag(Request $request, $type, $id)
+    public function deleteTag(Request $request, $type)
     {
-        $tag = company()->tags()->where([['type', $type], ['name', $request->query('name')]])->first()->id;
-        getModel($type, $id)->tags()->detach($tag);
+        $objs = $request->objects;
+        $tags = company()->tags()->where('type', $type)->whereIn('name', $request->tags)->get();
+        foreach ($tags as $tag) {
+            if ($type == 'customer') $tag->customers()->detach($objs);
+            else $tag->leads()->detach($objs);
+        }
         return response(null, 204);
     }
 }

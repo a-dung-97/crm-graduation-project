@@ -54,9 +54,9 @@ class Lead extends Model
         static::updating(function ($model) {
             $model->updated_by = user()->id;
         });
-        static::addGlobalScope('converted', function (Builder $builder) {
-            $builder->where('converted', 0);
-        });
+        // static::addGlobalScope('converted', function (Builder $builder) {
+        //     $builder->where('converted', 0);
+        // });
     }
     public function updatedBy()
     {

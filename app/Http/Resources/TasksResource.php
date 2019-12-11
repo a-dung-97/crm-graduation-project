@@ -17,7 +17,7 @@ class TasksResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'type' => convertTypeToModel($this->taskable_type),
+            'type' => $this->taskable_type,
             'status' => $this->convertStatus($this->status),
             'user' => $this->user->name,
             'taskable' => $this->taskable,

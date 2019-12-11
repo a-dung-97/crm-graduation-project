@@ -88,6 +88,7 @@ function convertModelToType($value)
             return 'Cơ hội';
             break;
         default:
+            return "";
             break;
     }
 }
