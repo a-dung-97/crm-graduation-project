@@ -17,8 +17,8 @@ class CreateCompaniesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->text('address');
-            $table->string('phone_number');
-            $table->string('description');
+            $table->string('phone_number')->nullable();
+            $table->string('description')->nullable();
         });
     }
 

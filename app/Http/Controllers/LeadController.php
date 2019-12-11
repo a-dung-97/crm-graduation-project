@@ -25,7 +25,7 @@ class LeadController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->query('perPage', 10);
-        $query = company()->leads();
+        $query = company()->leads()->where('converted', 0);
         if ($request->query('list')) {
             $name = $request->query('name');
             $query = $query->select('id', 'name', 'email', 'phone_number', 'mobile_number');
