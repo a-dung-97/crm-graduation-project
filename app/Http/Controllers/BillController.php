@@ -38,7 +38,7 @@ class BillController extends Controller
     {
         $currentAmount = $invoice->bills->sum('payment_amount') - $oldAmount;
         $totalAmount = $invoice->payment_amount;
-        return $totalAmount > $currentAmount + $paymentAmount;
+        return ($currentAmount + $paymentAmount) <= $totalAmount;
     }
     public function verify(Bill $bill)
     {
