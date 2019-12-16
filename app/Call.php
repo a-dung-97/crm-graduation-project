@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Task extends Model
+class Call extends Model
 {
     protected $guarded  = [];
-    public function taskable()
+    public function callable()
     {
         return $this->morphTo();
     }
@@ -22,13 +22,5 @@ class Task extends Model
     public function createdBy()
     {
         return $this->belongsTo('App\User', 'created_by');
-    }
-    public function contact()
-    {
-        return $this->belongsTo('App\Contact');;
-    }
-    public function opportunity()
-    {
-        return $this->belongsTo('App\Opportunity');;
     }
 }

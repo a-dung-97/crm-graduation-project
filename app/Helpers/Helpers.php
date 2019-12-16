@@ -119,3 +119,17 @@ function error($msg)
 {
     return response(['message' => $msg], 400);
 }
+function calculate($products, $shippingFee)
+{
+    $subtotal = $products->reduce(function ($value, $product) {
+        return $value + $product['detail']['price'] * $product['detail']['quantity'];
+    });
+    $discount = $products->reduce(function ($value, $product) {
+        return $value + ($product['detail']['discount'] / 100) * $product['detail']['quantity'] * $product['detail']['price'];
+    });
+    $tax = $products->reduce(function ($value, $product) {
+        return $value + ($product['detail']['tax'] / 100) * $product['detail']['quantity'] * $product['detail']['price'];
+    });
+    $total = $subtotal - $discount + $tax + $shippingFee;
+    return collect(['subtotal' => $subtotal, 'discount' => $discount, 'tax' => $tax, 'total' => $total]);
+}

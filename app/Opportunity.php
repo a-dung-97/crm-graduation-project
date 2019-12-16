@@ -65,4 +65,8 @@ class Opportunity extends Model
     {
         return $this->hasMany('App\Quotes');
     }
+    public function tasks()
+    {
+        return $this->hasMany('App\Task');
+    }
 }

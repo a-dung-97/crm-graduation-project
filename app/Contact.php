@@ -78,4 +78,12 @@ class Contact extends Model
     {
         return $this->morphToMany('App\Email', 'mailable')->as('detail')->withPivot('clicked', 'opened', 'delivered');
     }
+    public function calls()
+    {
+        return $this->morphMany('App\Call', 'callable');
+    }
+    public function appointments()
+    {
+        return $this->morphToMany('App\Appointment', 'appointmentable');
+    }
 }

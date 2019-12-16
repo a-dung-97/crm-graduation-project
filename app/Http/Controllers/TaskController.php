@@ -36,7 +36,6 @@ class TaskController extends Controller
             if ($startDate) $query = $query->whereBetween('start_date', $startDate);
             if ($finishDate) $query = $query->whereBetween('finish_date', $finishDate);
         });
-
         return TasksResource::collection($query->with('taskable:id,name', 'user:id,name')->paginate($perPage));
     }
 

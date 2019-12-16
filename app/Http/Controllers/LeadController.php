@@ -92,7 +92,7 @@ class LeadController extends Controller
     {
         if ($request->query('edit'))
             return ['data' => $lead];
-        else if ($request->query('getName')) return ['data' => ['name' => $lead->name]];
+        else if ($request->query('getName')) return ['data' => ['name' => $lead->name, 'company' => $lead->company]];
         else return new LeadResource($lead);
     }
 
@@ -159,6 +159,7 @@ class LeadController extends Controller
         $customerColumns = collect(Schema::getColumnListing('customers'));
         $contactColumns = collect(Schema::getColumnListing('contacts'));
         $customerData = $this->getSameColumn($leadColumns, $customerColumns, $lead);
+        return $customerData;
         $contactData = $this->getSameColumn($leadColumns, $contactColumns, $lead);
         $notes = $lead->notes;
         $files = $lead->files;
@@ -167,6 +168,7 @@ class LeadController extends Controller
         try {
             DB::beginTransaction();
             $customer = Customer::create($customerData);
+            $customer->update(['is_converted' => true]);
             $contact = $customer->contacts()->create($contactData);
             $notes->each(function ($item) use ($customer, $contact) {
                 unset($item['id']);
@@ -191,6 +193,12 @@ class LeadController extends Controller
             }
             $lead->update(['converted' => true]);
             $lead->tasks()->delete();
+            $lead->notes()->delete();
+            $lead->notes()->delete();
+            DB::table('mailables')->where('mailable_type', 'App\Lead')->where('mailable_id', $lead->id)->update([
+                'mailable_type' => 'App\Customer',
+                'mailable_id' => $customer->id,
+            ]);
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -209,6 +217,7 @@ class LeadController extends Controller
         foreach ($sameColumns as $column) {
             $data = array_merge($data, [$column => $lead[$column]]);
         }
+        if ($lead['company'] != '') $data['name'] = $lead['company'];
         return $data;
     }
 }

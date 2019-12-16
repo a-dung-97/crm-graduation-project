@@ -104,7 +104,9 @@ class OrderController extends Controller
 
     public function getInvoices(Order $order)
     {
-        return InvoicesResource::collection($order->invoices);
+        if ($order->invoices)
+            return new InvoicesResource($order->invoices);
+        else return ['data' => null];
     }
     public function sendOrder(Order $order)
     {

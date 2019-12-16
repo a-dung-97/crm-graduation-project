@@ -4,13 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Task extends Model
+class Appointment extends Model
 {
-    protected $guarded  = [];
-    public function taskable()
-    {
-        return $this->morphTo();
-    }
+    protected $guarded = [];
     public function user()
     {
         return $this->belongsTo('App\User');
@@ -23,12 +19,16 @@ class Task extends Model
     {
         return $this->belongsTo('App\User', 'created_by');
     }
-    public function contact()
+    public function leads()
     {
-        return $this->belongsTo('App\Contact');;
+        return $this->morphedByMany('App\Lead', 'appointmentable');
     }
-    public function opportunity()
+    public function contacts()
     {
-        return $this->belongsTo('App\Opportunity');;
+        return $this->morphedByMany('App\Contact', 'appointmentable');
+    }
+    public function users()
+    {
+        return $this->morphedByMany('App\User', 'appointmentable');
     }
 }

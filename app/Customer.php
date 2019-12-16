@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Customer extends Model
 {
@@ -79,6 +80,20 @@ class Customer extends Model
     public function emails()
     {
         return $this->morphToMany('App\Email', 'mailable')->as('detail')->withPivot('clicked', 'opened', 'delivered');
+    }
+    public function calls()
+    {
+        return $this->hasManyThrough('App\Call', 'App\Contact', 'customer_id', 'callable_id');
+    }
+    public function appointments()
+    {
+        $contacts = $this->contacts->pluck('id')->all();
+        $appointments = DB::table('appointmentables')
+            ->where('appointmentable_type', 'App\Contact')
+            ->whereIn('appointmentable_id', $contacts)->get()->pluck('appointment_id')->unique()->all();
+        return Appointment::whereIn('id', $appointments)->with(['contacts' => function ($query) use ($contacts) {
+            $query->whereIn('id', $contacts)->select('id', 'name');
+        }]);
     }
 
 

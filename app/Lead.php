@@ -40,6 +40,10 @@ class Lead extends Model
     {
         return $this->morphMany('App\Task', 'taskable');
     }
+    public function calls()
+    {
+        return $this->morphMany('App\Call', 'callable');
+    }
     public function ownerable()
     {
         return $this->morphTo();
@@ -58,6 +62,10 @@ class Lead extends Model
         //     $builder->where('converted', 0);
         // });
     }
+    public function scopeConverted($query)
+    {
+        return $query->where('converted', '<>', 0);
+    }
     public function updatedBy()
     {
         return $this->belongsTo('App\User', 'updated_by');
@@ -73,5 +81,9 @@ class Lead extends Model
     public function emails()
     {
         return $this->morphToMany('App\Email', 'mailable')->as('detail')->withPivot('clicked', 'opened', 'delivered');
+    }
+    public function appointments()
+    {
+        return $this->morphToMany('App\Appointment', 'appointmentable');
     }
 }

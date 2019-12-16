@@ -124,4 +124,16 @@ class Company extends Model
     {
         return $this->hasMany('App\Webform');
     }
+    public function reports()
+    {
+        return $this->hasMany('App\Report');
+    }
+    public function calls()
+    {
+        return $this->hasMany('App\Call');
+    }
+    public function appointments()
+    {
+        return $this->hasMany('App\Appointment');
+    }
 }

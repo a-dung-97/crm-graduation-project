@@ -32,10 +32,16 @@ class UserController extends Controller
         $perPage = $request->query('perPage');
         $search = $request->query('search');
         $query =  User::latest();
-
+        if ($request->query('list')) {
+            $name = $request->query('name');
+            $query = $query->select('id', 'name', 'email');
+            if ($request->query('name')) $query = $query->where('name', 'like', '%' . $name . '%');
+            return  UserResource::collection($query->paginate($perPage));
+        }
         if ($search) $query = $query->where('name', 'like', '%' . $search . '%')
             ->orWhere('email', 'like', '%' . $search . '%')
             ->orWhere('phone_number', 'like', '%' . $search . '%');
+
         if ($perPage) {
             $query = $query->paginate($perPage);
             return UserResource::collection($query);

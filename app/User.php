@@ -91,19 +91,31 @@ class User extends Authenticatable implements JWTSubject
     }
     public function contacts()
     {
-        return $this->morphMany('App\Contacts', 'ownerable');
+        return $this->morphMany('App\Contact', 'ownerable');
     }
     public function quotes()
     {
-        return $this->morphMany('App\Quotes', 'ownerable');
+        return $this->morphMany('App\Quote', 'ownerable');
+    }
+    public function orders()
+    {
+        return $this->morphMany('App\Order', 'ownerable');
     }
     public function emailAddresses()
     {
         return $this->hasMany('App\EmailAddress');
     }
+    public function tasks()
+    {
+        return $this->hasMany('App\Task');
+    }
     protected static function boot()
     {
         parent::boot();
         static::addGlobalScope(new CompanyScope);
+    }
+    public function appointments()
+    {
+        return $this->morphToMany('App\Appointment', 'appointmentable');
     }
 }

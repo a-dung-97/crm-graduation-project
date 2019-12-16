@@ -31,9 +31,9 @@ class ContactController extends Controller
         if ($request->query('list')) {
             $name = $request->query('name');
             $id = $request->query('customer');
-            $query = $query->select('id', 'name', 'email', 'phone_number');
             if ($name) $query = $query->where('name', 'like', '%' . $name . '%');
             if ($id) $query = $query->where('customer_id', $id);
+            $query = $query->select('id', 'name', 'email', 'phone_number');
             return  ContactListResource::collection($query->paginate($perPage));
         }
 

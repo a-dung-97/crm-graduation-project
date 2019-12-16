@@ -35,6 +35,9 @@ class CreateTasksTable extends Migration
             $table->unsignedBigInteger('contact_id')->nullable();
             $table->foreign('contact_id')->references('id')->on('contacts');
 
+            $table->unsignedBigInteger('opportunity_id')->nullable();
+            $table->foreign('opportunity_id')->references('id')->on('opportunities');
+
             $table->dateTime('reminder_time')->nullable();
             $table->enum('reminder_type', ['1', '2', '3'])->nullable();
 

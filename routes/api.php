@@ -82,9 +82,14 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::put('tasks/{task}/finish', 'TaskController@finishTask');
     Route::apiResource('tasks', 'TaskController');
-    Route::apiResource('tasks', 'TaskController');
     Route::post('tasks/{type}/{id}', 'TaskController@addTask');
     Route::get('tasks/{type}/{id}', 'TaskController@getTasks');
+
+    Route::get('calls/{type}/{id}', 'CallController@getCalls');
+    Route::apiResource('calls', 'CallController');
+    Route::get('appointments/{type}/{id}', 'AppointmentController@getAppointments');
+    Route::apiResource('appointments', 'AppointmentController');
+
 
     Route::get('customers/{customer}/{type}', 'CustomerController@getRelatedInfo');
     Route::apiResource('customers', 'CustomerController');
@@ -116,6 +121,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('lead-score-rules', 'LeadScoreRuleController');
     Route::apiResource('email-templates', 'EmailTemplateController');
     Route::apiResource('webforms', 'WebformController');
+    Route::get('reports/leads', 'ReportController@getLeads');
+    Route::get('reports/email-campaigns', 'ReportController@getEmailCampaigns');
+    Route::get('reports/revenue', 'ReportController@getRevenue');
+    Route::get('reports/converted', 'ReportController@getConverted');
+    Route::get('reports/tasks', 'ReportController@getTasks');
+    Route::get('reports/products', 'ReportController@getProducts');
+    Route::get('reports/debt', 'ReportController@getDebt');
+    Route::apiResource('reports', 'ReportController');
     Route::apiResource('emails', 'EmailController', ['only' => ['index', 'store']]);
     Route::get('email-campaigns/{email_campaign}/list', 'EmailCampaignController@getListEmail');
     Route::apiResource('email-campaigns', 'EmailCampaignController', ['except' => 'update']);
