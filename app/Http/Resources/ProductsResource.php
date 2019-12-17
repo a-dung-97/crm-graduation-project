@@ -23,6 +23,7 @@ class ProductsResource extends JsonResource
             'barcode' => $this->barcode,
             'brand' => $this->brand,
             'sale_price' => $this->sale_price,
+            'perchase_price' => $this->perchase_price,
             'unit' => $this->unit,
             'tax' => $this->tax,
             'image' => new ProductImageResource($this->images->where('default', true)->first() ? $this->images->where('default', true)->first() : $this->images->first())
