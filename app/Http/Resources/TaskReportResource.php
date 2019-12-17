@@ -22,7 +22,7 @@ class TaskReportResource extends JsonResource
             'opportunity' => $this->opportunity ? ['name' => $this->opportunity->name, 'id' => $this->opportunity->id] : null,
             'taskable' => $this->taskable,
             'start_date' => $this->start_date,
-            'priority' => $this->priority,
+            'priority' => $this->convertPriority($this->priority),
             'expiration_date' => $this->expiration_date
         ];
     }
@@ -40,6 +40,29 @@ class TaskReportResource extends JsonResource
                 break;
             case '4':
                 return 'Đã hoàn thành';
+                break;
+            default:
+                return null;
+                break;
+        }
+    }
+    private function convertPriority($val)
+    {
+        switch ($val) {
+            case '1':
+                return 'Thấp nhất';
+                break;
+            case '2':
+                return 'Thấp';
+                break;
+            case '3':
+                return 'Bình thường';
+                break;
+            case '4':
+                return 'Cao';
+                break;
+            case '5':
+                return 'Cao nhất';
                 break;
             default:
                 return null;
