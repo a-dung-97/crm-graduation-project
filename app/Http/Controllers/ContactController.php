@@ -29,7 +29,7 @@ class ContactController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->query('perPage', 10);
-        $query = company()->contacts();
+        $query = company()->contacts()->latest();
         if ($request->query('list')) {
             $name = $request->query('name');
             $id = $request->query('customer');

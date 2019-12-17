@@ -52,7 +52,8 @@ class CreateCustomersTable extends Migration
             $table->foreign('created_by')->references('id')->on('users');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->foreign('updated_by')->references('id')->on('users');
-            $table->boolean('is_converted')->default(false);
+            $table->unsignedBigInteger('converted_from')->nullable();
+            $table->foreign('converted_from')->references('id')->on('leads');
             $table->timestamps();
         });
     }

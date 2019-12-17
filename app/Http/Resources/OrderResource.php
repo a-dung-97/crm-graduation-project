@@ -22,6 +22,7 @@ class OrderResource extends JsonResource
             'contact' => new ContactsResource($this->contact),
             'opportunity' => new OpportunitiesResource($this->opportunity),
             'quote' => new OrdersResource($this->quote),
+            'paid' => collect($this->invoice["bills"])->where('status', 'Đã xác nhận')->sum('payment_amount')
         ]);
     }
 }

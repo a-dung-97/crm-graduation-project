@@ -36,7 +36,7 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->query('perPage', 10);
-        $query = company()->customers();
+        $query = company()->customers()->latest();
         if ($request->query('list')) {
             $name = $request->query('name');
             $query = $query->select('id', 'name', 'email', 'phone_number', 'mobile_number');

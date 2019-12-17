@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Catalog;
 use App\Contact;
 use App\Customer;
 use App\Http\Requests\LeadRequest;
@@ -25,7 +26,7 @@ class LeadController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->query('perPage', 10);
-        $query = company()->leads()->where('converted', 0);
+        $query = company()->leads()->latest()->where('converted', 0);
         if ($request->query('list')) {
             $name = $request->query('name');
             $query = $query->select('id', 'name', 'email', 'phone_number', 'mobile_number');
@@ -167,7 +168,7 @@ class LeadController extends Controller
         try {
             DB::beginTransaction();
             $customer = Customer::create($customerData);
-            $customer->update(['is_converted' => true]);
+            $customer->update(['converted_from' => $lead->id]);
             $contact = $customer->contacts()->create($contactData);
             $notes->each(function ($item) use ($customer, $contact) {
                 unset($item['id']);
@@ -194,10 +195,29 @@ class LeadController extends Controller
             $lead->tasks()->delete();
             $lead->notes()->delete();
             $lead->notes()->delete();
+            if ($lead->source)
+                $source = Catalog::where([
+                    ['parent_id', null],
+                    ['name', 'Khách hàng'],
+                ])->first()->catalogs()->where('name', 'Nguồn')->first()->catalogs()->where('company_id', company()->id)->where('name', $lead->source->name)->first();
+            else $source = null;
+            if ($lead->branch)
+                $branch = Catalog::where([
+                    ['parent_id', null],
+                    ['name', 'Khách hàng'],
+                ])->first()->catalogs()->where('name', 'Ngành nghề')->first()->catalogs()->where('company_id', company()->id)->where('name', $lead->branch->name)->first();
+            else $branch = null;
+            $customer->update(['source_id' => $source ? $source->id : null, 'branch_id' => $branch ? $branch->id : null]);
             DB::table('mailables')->where('mailable_type', 'App\Lead')->where('mailable_id', $lead->id)->update([
                 'mailable_type' => 'App\Customer',
                 'mailable_id' => $customer->id,
             ]);
+            $lead->mailingLists()->detach();
+            $lead->calls()->update(['callable_type' => 'App\Contact', 'callable_id' => $contact->id]);
+            $lead->appointments->each(function ($item) use ($contact) {
+                $item->contacts()->attach($contact->id);
+            });
+            $lead->appointments()->detach();
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -209,7 +229,7 @@ class LeadController extends Controller
     private function getSameColumn($arr1, $arr2, $lead, $customer)
     {
         $sameColumns = $arr1->intersect($arr2)->filter(function ($item) {
-            if ($item == 'id' || $item == 'updated_by' || $item == 'created_by' || $item == 'created_at' || $item == 'updated_at') return false;
+            if ($item == 'id' || $item == 'updated_by' || $item == 'created_by' || $item == 'created_at' || $item == 'updated_at' || $item == 'source_id' || $item == 'branch_id') return false;
             return true;
         })->values()->all();
         $data = [];
