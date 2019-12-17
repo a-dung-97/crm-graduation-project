@@ -374,7 +374,7 @@ class ReportController extends Controller
         $query = $this->getFilter(company()->leads(), 'created_at', $time);
         $newLeads = $query->count();
         $convertedLeads = $query->where('converted', 1)->count();
-        $newOpportunities = company()->customer()->whereIn('converted_from', $query->select('id')->get()->pluck('id')->all())->has('opportunities')->count();
+        $newOpportunities = company()->customers()->whereIn('converted_from', $query->select('id')->get()->pluck('id')->all())->has('opportunities')->count();
         return ['data' => [$newLeads, $convertedLeads, $newOpportunities]];
     }
 }
