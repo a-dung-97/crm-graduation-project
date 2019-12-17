@@ -17,9 +17,9 @@ class OpportunityResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'customer' => $this->customer->name,
+            'customer' => $this->customer()->select('id', 'name', 'delivery_address', 'invoice_address')->first(),
             'owner' => $this->ownerable->name,
-            'contact' => $this->contact ? $this->contact->name : null,
+            'contact' => $this->contact()->select('id', 'name')->first(),
             'source' => $this->source ? $this->source->name : null,
             'type' => $this->type ? $this->type->name : null,
             'next_step' => $this->next_step,

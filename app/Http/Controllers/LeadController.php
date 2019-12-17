@@ -158,9 +158,8 @@ class LeadController extends Controller
         $leadColumns = collect(Schema::getColumnListing('leads'));
         $customerColumns = collect(Schema::getColumnListing('customers'));
         $contactColumns = collect(Schema::getColumnListing('contacts'));
-        $customerData = $this->getSameColumn($leadColumns, $customerColumns, $lead);
-        return $customerData;
-        $contactData = $this->getSameColumn($leadColumns, $contactColumns, $lead);
+        $customerData = $this->getSameColumn($leadColumns, $customerColumns, $lead, true);
+        $contactData = $this->getSameColumn($leadColumns, $contactColumns, $lead, false);
         $notes = $lead->notes;
         $files = $lead->files;
         $tasks = $lead->tasks;
@@ -207,7 +206,7 @@ class LeadController extends Controller
 
         return created($customer);
     }
-    private function getSameColumn($arr1, $arr2, $lead)
+    private function getSameColumn($arr1, $arr2, $lead, $customer)
     {
         $sameColumns = $arr1->intersect($arr2)->filter(function ($item) {
             if ($item == 'id' || $item == 'updated_by' || $item == 'created_by' || $item == 'created_at' || $item == 'updated_at') return false;
@@ -217,7 +216,7 @@ class LeadController extends Controller
         foreach ($sameColumns as $column) {
             $data = array_merge($data, [$column => $lead[$column]]);
         }
-        if ($lead['company'] != '') $data['name'] = $lead['company'];
+        if ($lead['company'] != '' && $customer) $data['name'] = $lead['company'];
         return $data;
     }
 }

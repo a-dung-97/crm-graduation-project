@@ -21,6 +21,7 @@ class ContactResource extends JsonResource
             'phone_number' => $this->phone_number,
             'mobile_number' => $this->mobile_number,
             'customer' => $this->customer->name,
+            'customer_id' => $this->customer->id,
             'skype' => $this->skype,
             'facebook' => $this->facebook,
             'office_address' => $this->office_address,

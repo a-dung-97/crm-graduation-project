@@ -6,6 +6,8 @@ use App\Http\Requests\OpportunityRequest;
 use App\Http\Resources\OpportunitiesResource;
 use App\Http\Resources\OpportunityListResouce;
 use App\Http\Resources\OpportunityResource;
+use App\Http\Resources\OrdersResource;
+use App\Http\Resources\QuotesResource;
 use App\Opportunity;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -97,5 +99,13 @@ class OpportunityController extends Controller
     public function destroy(Opportunity $opportunity)
     {
         delete($opportunity);
+    }
+    public function getQuotes(Opportunity $opportunity)
+    {
+        return QuotesResource::collection($opportunity->quotes()->get());
+    }
+    public function getOrders(Opportunity $opportunity)
+    {
+        return OrdersResource::collection($opportunity->orders()->get());
     }
 }

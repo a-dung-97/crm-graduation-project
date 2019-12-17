@@ -27,7 +27,7 @@ class TaskController extends Controller
         $user = $request->query('user');
         $startDate = $request->query('startDate');
         $finishDate = $request->query('finishDate');
-        $query = company()->tasks();
+        $query = company()->tasks()->latest();
         $query = $query->where(function ($query) use ($status, $title, $user, $startDate, $finishDate, $type) {
             if ($title) $query = $query->where('title', 'like', '%' . $title . '%');
             if ($status) $query = $query->where('status', $status);

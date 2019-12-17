@@ -94,6 +94,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('customers/{customer}/{type}', 'CustomerController@getRelatedInfo');
     Route::apiResource('customers', 'CustomerController');
     Route::apiResource('contacts', 'ContactController');
+    Route::get('opportunities/{opportunity}/orders', 'OpportunityController@getOrders');
+    Route::get('opportunities/{opportunity}/quotes', 'OpportunityController@getQuotes');
     Route::apiResource('opportunities', 'OpportunityController');
 
     Route::get('orders/{order}/send', 'OrderController@sendOrder');

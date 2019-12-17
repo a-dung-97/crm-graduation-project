@@ -29,6 +29,7 @@ class TaskResource extends JsonResource
                 'detail' => $this->taskable()->select('id', 'name', 'email', 'phone_number', 'mobile_number')->first()
             ] : null,
             'contact' => $this->contact()->select('id', 'name', 'email', 'phone_number', 'mobile_number')->first(),
+            'opportunity' => $this->opportunity()->select('id', 'name')->first(),
             'reminder' => [
                 'time' => $this->reminder_time,
                 'type' => $this->reminder_type,

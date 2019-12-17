@@ -63,10 +63,14 @@ class Opportunity extends Model
     }
     public function quotes()
     {
-        return $this->hasMany('App\Quotes');
+        return $this->hasMany('App\Quote');
     }
     public function tasks()
     {
         return $this->hasMany('App\Task');
+    }
+    public function orders()
+    {
+        return $this->hasMany('App\Order');
     }
 }

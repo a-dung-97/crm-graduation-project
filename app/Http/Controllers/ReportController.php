@@ -137,13 +137,13 @@ class ReportController extends Controller
                         $query->select('id', 'code', 'name', 'email', 'phone_number', 'delivery_address', 'ownerable_id', 'ownerable_type')->with('ownerable:id,name');
                     },
                     'products',
-                    'invoices.bills',
+                    'invoice.bills',
                     'ownerable'
                 ])->get();
                 $query = $query->each(function ($item) {
                     $item['order_code'] = $item['code'];
                     $calculate = calculate(collect($item['products']), $item["shipping_fee"]);
-                    $item['paid'] = collect($item['invoices']["bills"])->where('status', 'Đã xác nhận')->sum('payment_amount');
+                    $item['paid'] = collect($item['invoice']["bills"])->where('status', 'Đã xác nhận')->sum('payment_amount');
                     $item['total'] = $calculate['total'];
                     $item['discount'] = $calculate['discount'];
                     $item['seller'] = $item['ownerable']['name'];
@@ -155,7 +155,7 @@ class ReportController extends Controller
                         $item[$key] = $val;
                     }
                     unset($item['products']);
-                    unset($item['invoices']);
+                    unset($item['invoice']);
                     unset($item['customer']);
                     unset($item['ownerable']);
                 })->map(function ($item) {
@@ -261,7 +261,7 @@ class ReportController extends Controller
             ->whereHas('orders', function (Builder $query) use ($orderDate) {
                 $query->whereBetween('order_date', $orderDate);
             })->with('ownerable:id,name')->with(['orders' => function ($query) use ($orderDate) {
-                $query->select('id', 'customer_id', 'shipping_fee')->whereBetween('order_date', $orderDate)->with('products:id', 'invoices:id,order_id', 'invoices.bills');
+                $query->select('id', 'customer_id', 'shipping_fee')->whereBetween('order_date', $orderDate)->with('products:id', 'invoice:id,order_id', 'invoice.bills');
             }])->get();
         $query = $query->each(function ($item) {
             $item['owner'] = $item['ownerable']['name'];
@@ -270,7 +270,7 @@ class ReportController extends Controller
             $paid = 0;
             $item->orders->each(function ($item) use (&$total, &$paid) {
                 $calculate = calculate($item->products, $item->shipping_fee);
-                $paid += collect($item['invoices']['bills'])->where('status', 'Đã xác nhận')->sum('payment_amount');
+                $paid += collect($item['invoice']['bills'])->where('status', 'Đã xác nhận')->sum('payment_amount');
                 $total += $calculate['total'];
             });
             $item['total'] = $total;

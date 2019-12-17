@@ -21,7 +21,9 @@ class ContactController extends Controller
     }
     public function update(ContactRequest $request, Contact $contact)
     {
-        $contact->update($request->all());
+        $request = $request->all();
+        $request['name'] = $request['first_name'] . ' ' . $request['last_name'];
+        $contact->update($request);
         return updated();
     }
     public function index(Request $request)

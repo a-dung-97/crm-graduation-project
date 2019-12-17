@@ -33,7 +33,7 @@ class OrderController extends Controller
 
         $query = company()->orders()->latest('id');
         if ($code) $query = $query->where('code', 'like', '%' . $code . '%');
-        if ($list) return  OrderListResource::collection($query->select('id', 'code', 'customer_id')->with('customer:id,name')->paginate($perPage));
+        if ($list) return  OrderListResource::collection($query->select('id', 'code', 'customer_id')->doesntHave('invoice')->with('customer:id,name')->paginate($perPage));
         if ($status) $query = $query->where('status_id',  $code);
         if ($customer) $query = $query->whereHas('customer', function (Builder $query) use ($customer) {
             $query->where('name', 'like', '%' . $customer . '%');
@@ -104,8 +104,8 @@ class OrderController extends Controller
 
     public function getInvoices(Order $order)
     {
-        if ($order->invoices)
-            return new InvoicesResource($order->invoices);
+        if ($order->invoice)
+            return new InvoicesResource($order->invoice);
         else return ['data' => null];
     }
     public function sendOrder(Order $order)

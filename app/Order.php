@@ -40,7 +40,7 @@ class Order extends Model
     {
         return $this->belongsTo('App\Quote');
     }
-    public function invoices()
+    public function invoice()
     {
         return $this->hasOne('App\Invoice');
     }
