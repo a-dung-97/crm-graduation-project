@@ -347,10 +347,10 @@ class ReportController extends Controller
                 return $query->whereDate($column, Carbon::parse('yesterday')->toDateString());
                 break;
             case 'thisweek':
-                return $query->whereBetween(DB::raw("DATE('${$column}')"), $this->getWeek('this week'));
+                return $query->whereBetween(DB::raw("DATE({$column})"), $this->getWeek('this week'));
                 break;
             case 'lastweek':
-                return $query->whereBetween(DB::raw("DATE('${$column}')"), $this->getWeek('last week'));
+                return $query->whereBetween(DB::raw("DATE({$column})"), $this->getWeek('last week'));
                 break;
             case 'thismonth':
                 return $query->whereMonth($column, Carbon::parse('this month')->month);
