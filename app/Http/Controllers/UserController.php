@@ -97,7 +97,7 @@ class UserController extends Controller
                 'email_verified_at' => Carbon::now()->toDateTimeString(),
                 'company_id' => User::find($invitation->user_id)->company_id
             ]);
-            return "<h1>Đăng kí tài khoản thành công!</h1>";
+            return "<h1>Đăng ký tài khoản thành công!</h1>";
         }
         abort(404);
     }

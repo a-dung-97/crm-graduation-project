@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
-                                        Đăng kí tài khoản
+                                        Đăng ký tài khoản
                                     </button>
                                 </div>
                         </div>

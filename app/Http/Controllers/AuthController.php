@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Company;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\CompanyRequest;
@@ -17,7 +16,6 @@ use App\Services\TinyDrive;
 use App\User;
 use Carbon\Carbon;
 use CatalogSeeder;
-use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -105,7 +103,7 @@ class AuthController extends Controller
             'email' => $user->email,
             'avatar' => $user->avatar ?  Storage::url('avatars/' . $user->avatar) : null,
             'phone_number' => $user->phone_number,
-            'roles' => $user->role_id ?  [$user->role->code] : [],
+            'roles' => $user->role_id ?  [$user->role->id] : [],
             'company' => $user->company_id ? $user->company->name : null,
             'department' => $user->department_id ? $user->department->name : null,
             'position' => $user->position_id ? $user->position->name : null,

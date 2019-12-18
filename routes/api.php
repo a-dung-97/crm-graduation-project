@@ -40,7 +40,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('users/invite', 'UserController@inviteUser');
     Route::apiResource('users', 'UserController', ['except' => ['show']]);
 
+    Route::put('roles/{role}/menu', 'RoleController@updateMenu');
+    Route::get('roles/{role}/menu', 'RoleController@getMenus');
     Route::apiResource('roles', 'RoleController', ['except' => ['show']]);
+    Route::apiResource('menus', 'MenuController', ['only' => ['index']]);
 
     Route::post('groups/user/{group}', 'GroupController@updateUsers');
     Route::apiResource('groups', 'GroupController', ['except' => ['show']]);

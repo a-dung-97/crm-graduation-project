@@ -45,4 +45,15 @@ class RoleController extends Controller
             return response(['message' => 'Quyền này chứa người dùng']);
         }
     }
+    public function updateMenu(Role $role, Request $request)
+    {
+        $role->menus()->sync($request->all());
+        return ['message' => 'updated'];
+    }
+
+
+    public function getMenus(Role $role)
+    {
+        return ['data' => $role->menus()->select('id')->get()->pluck('id')->all()];
+    }
 }

@@ -25,16 +25,14 @@ class RoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'code' => ['required', new Unique('roles', 'code', $this->id)]
+            'name' => ['required', new Unique('roles', 'name', $this->id)]
         ];
     }
     public function messages()
     {
         return [
             "name.required" => "Bạn chưa nhập tên quyền",
-            "code.required" => "Bạn chưa nhập mã quyền",
-            "code.unique" => "Mã quyền này đã tồn tại"
+            "name.unique" => "Tên quyền này đã tồn tại"
         ];
     }
 }
