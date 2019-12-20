@@ -11,6 +11,7 @@ use App\Http\Requests\PasswordResetRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\PasswordReset;
 use App\Mail\VerifyEmail;
+use App\Menu;
 use App\Scopes\CompanyScope;
 use App\Services\TinyDrive;
 use App\User;
@@ -152,6 +153,7 @@ class AuthController extends Controller
         $firstDepartment = $company->departments()->create(['name' => 'Công ty', 'description' => 'Công ty']);
         $firstPosition = $company->positions()->create(['name' => 'CEO']);
         $firstRole = $company->roles()->create(['name' => 'Full', 'code' => 'full']);
+        $firstRole->menus()->attach(Menu::select('id')->get()->pluck('id')->all());
         CatalogSeeder::run($company->id);
         auth()->user()->update(['company_id' => $company->id, 'position_id' => $firstPosition->id, 'role_id' => $firstRole->id, 'department_id' => $firstDepartment->id]);
         return response('created', Response::HTTP_CREATED);
