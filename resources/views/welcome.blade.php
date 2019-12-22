@@ -67,8 +67,7 @@
 </head>
 
 <body>
-
-    <iframe src="http://localhost:9528/#/webform/generated?id=3" width="600" height="700" frameborder="0"></iframe>
+    <p>Hello</p>
 </body>
 
 </html>
