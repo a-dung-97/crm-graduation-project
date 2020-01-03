@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Group;
 use App\Http\Requests\CompanyRequest;
 use App\Http\Requests\InvitationRequest;
+use App\Http\Resources\NotificationResource;
 use App\Http\Resources\UserResource;
 use App\Invitation;
 use App\Mail\InvitationEmail;
@@ -134,5 +135,16 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             return response(['message' => 'Bạn không thể xóa người dùng này'], 400);
         }
+    }
+    public function getNotifications(Request $request)
+    {
+        return NotificationResource::collection(user()->notifications()->latest()->offset($request->query('offset'))->limit(6)->get())->additional([
+            'unread' => user()->unreadNotifications()->count()
+        ]);
+    }
+    public function markAsRead()
+    {
+        user()->unreadNotifications->markAsRead();
+        return updated();
     }
 }

@@ -35,6 +35,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     Route::post('users/avatar', 'UserController@changeAvatar');
+    Route::get('notifications', 'UserController@getNotifications');
+    Route::put('notifications', 'UserController@markAsRead');
     Route::get('users/company', 'UserController@getCompany');
     Route::put('users/company', 'UserController@updateCompany');
     Route::post('users/invite', 'UserController@inviteUser');

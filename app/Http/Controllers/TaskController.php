@@ -6,6 +6,9 @@ use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskInDetailResource;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\TasksResource;
+use App\Jobs\AddMembersToMailingList;
+use App\Notifications\NewTask;
+use App\Notifications\TaskReminder;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -105,7 +108,11 @@ class TaskController extends Controller
         $request = $request->all();
         $request['company_id'] = company()->id;
         $request['created_by'] = user()->id;
-        getModel($type, $id)->tasks()->create($request);
+        $task = getModel($type, $id)->tasks()->create($request);
+        $user = $task->user;
+        if ($task->reminder_type)
+            $user->notify((new TaskReminder($task))->delay(Carbon::parse($task->reminder_time)));
+        $user->notify(new NewTask($task));
         return response(['message' => "added"]);
     }
     public function getTasks(Request $request, $type, $id)
