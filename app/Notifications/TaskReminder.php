@@ -77,7 +77,7 @@ class TaskReminder extends Notification implements ShouldQueue
         return new BroadcastMessage([
             'link' => '/business/task/show/' . $this->task->id,
             'name' => $this->task->title,
-            'type' => 'Nhắc nhở công việc'
+            'obj_type' => 'Nhắc nhở công việc'
         ]);
     }
 }
