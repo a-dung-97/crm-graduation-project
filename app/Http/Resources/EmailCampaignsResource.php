@@ -20,7 +20,6 @@ class EmailCampaignsResource extends JsonResource
             'subject' => $this->subject,
             'description' => $this->description,
             'created_at' => $this->created_at,
-            'type' => $this->order? 'Tự động' : 'Chiến dịch',
             'from_email' => $this->email->from_email,
             'from_name' => $this->email->from_name,
             'total_count' => $this->email->related->count(),

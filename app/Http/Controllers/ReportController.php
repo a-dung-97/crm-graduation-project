@@ -318,7 +318,7 @@ class ReportController extends Controller
     }
     public function getEmailCampaigns()
     {
-        return EmailCampaignsResource::collection(company()->emailCampaigns()->latest()->with('email.related')->take(5)->get());
+        return EmailCampaignsResource::collection(company()->emailCampaigns()->where('order', null)->latest()->with('email.related')->take(5)->get());
     }
     public function getRevenue(Request $request)
     {

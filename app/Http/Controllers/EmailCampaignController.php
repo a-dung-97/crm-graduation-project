@@ -21,7 +21,7 @@ class EmailCampaignController extends Controller
     {
         $perPage = $request->query('perPage', 10);
         $list = $request->query('list');
-        $query = company()->emailCampaigns();
+        $query = company()->emailCampaigns()->where('order', null);
         if ($list) return ['data' => $query->select('id', 'name', 'mailing_list_id')->get()];
         $perPage = $request->query('perPage', 10);
         $search = $request->query('search');
