@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AddMemberToMailingList;
 use App\Http\Requests\AddMembersToMailingListRequest;
 use App\Http\Requests\MailingListRequest;
 use App\Http\Resources\MailingListResource;
@@ -83,6 +84,7 @@ class MailingListController extends Controller
                     if ($type == "contact") $list->contacts()->attach($member['id']);
                     if ($type == "customer") $list->customers()->attach($member['id']);
                     if ($type == "lead") $list->leads()->attach($member['id']);
+                    event(new AddMemberToMailingList($list));
                 }
             }
         }

@@ -27,4 +27,8 @@ class MailingList extends Model
     {
         return $this->hasMany('App\EmailCampaign');
     }
+    public function automations()
+    {
+        return $this->hasMany('App\EmailAutomation');
+    }
 }

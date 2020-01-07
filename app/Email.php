@@ -27,4 +27,8 @@ class Email extends Model
     {
         return $this->hasMany('App\Mailable');
     }
+    public function messageId()
+    {
+        return $this->hasMany('App\MessageId');
+    }
 }

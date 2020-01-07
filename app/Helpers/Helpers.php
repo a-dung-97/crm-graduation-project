@@ -5,6 +5,7 @@ use App\Customer;
 use App\Lead;
 use App\Opportunity;
 use App\Product;
+use Carbon\Carbon;
 
 function company()
 {
@@ -132,4 +133,26 @@ function calculate($products, $shippingFee)
     });
     $total = $subtotal - $discount + $tax + $shippingFee;
     return collect(['subtotal' => $subtotal, 'discount' => $discount, 'tax' => $tax, 'total' => $total]);
+}
+
+
+function getDelayTime($time, $mode)
+{
+    switch ($mode) {
+        case 'h':
+            return Carbon::now()->addHours($time);
+            break;
+        case 'd':
+            return Carbon::now()->addDays($time);
+            break;
+        case 'w':
+            return Carbon::now()->addWeeks($time);
+            break;
+        case 'm':
+            return Carbon::now()->addMonths($time);
+            break;
+
+        default:
+            break;
+    };
 }

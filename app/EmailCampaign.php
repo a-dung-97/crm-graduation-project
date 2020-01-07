@@ -15,4 +15,8 @@ class EmailCampaign extends Model
     {
         return $this->morphOne('App\Email', 'mailable');
     }
+    public function automation()
+    {
+        return $this->belongsTo('App\EmailAutomation', 'email_automation_id');
+    }
 }

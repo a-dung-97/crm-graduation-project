@@ -122,6 +122,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('email-addresses/{email_address}/primary', 'EmailAddressController@setPrimary');
     Route::get('email-addresses/{email_address}/confirm', 'EmailAddressController@sendConfirmEmail');
     Route::apiResource('email-addresses', 'EmailAddressController');
+
+    Route::put('email-automations/{email_automation}/active', 'EmailAutomationController@changeActive');
+    Route::get('email-automations/{email_automation}/email', 'EmailAutomationController@getEmails');
+    Route::post('email-automations/{email_automation}/email', 'EmailAutomationController@addEmail');
+    Route::put('email-automations/email/{email}', 'EmailAutomationController@updateEmail');
+    Route::apiResource('email-automations', 'EmailAutomationController');
+
     Route::post('mailing-lists/members', 'MailingListController@addMembers');
     Route::delete('mailing-lists/{mailing_list}/members', 'MailingListController@deleteMembers');
     Route::apiResource('mailing-lists', 'MailingListController');

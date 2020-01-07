@@ -21,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\LeadOrRulesChanged' => [
             'App\Listeners\UpdateLeadScore',
         ],
+        'App\Events\AddMemberToMailingList' => [
+            'App\Listeners\SendFirstEmail',
+        ],
     ];
 
     /**

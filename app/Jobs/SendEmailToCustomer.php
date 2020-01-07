@@ -23,10 +23,12 @@ class SendEmailToCustomer implements ShouldQueue
      */
     protected $info;
     protected $email;
-    public function __construct($info, Email $email)
+    protected $automation;
+    public function __construct($info, Email $email, $automation = null)
     {
         $this->info = $info;
         $this->email = $email;
+        $this->automation = $automation;
     }
     /**
      * Execute the job.
@@ -42,7 +44,12 @@ class SendEmailToCustomer implements ShouldQueue
             $message->to($info['email'], $info['name']);
         });
         $messageId = rtrim(ltrim($response->id, '<'), '>');
-        $this->email->update(['status' => 2, 'message_id' => $messageId]);
+        if ($this->automation) {
+            $this->email->messageId()->create([
+                'message_id' => $messageId,
+            ]);
+        } else
+            $this->email->update(['status' => 2, 'message_id' => $messageId]);
     }
     public function fail($exception = null)
     {

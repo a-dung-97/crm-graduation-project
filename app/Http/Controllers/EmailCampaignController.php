@@ -96,6 +96,13 @@ class EmailCampaignController extends Controller
                 'mailable_id' => $item['id'],
             ]);
         BatchSending::dispatch($list, $info, $email);
-        return  created();
+        return created();
+    }
+    public function destroy(EmailCampaign $emailCampaign)
+    {
+        $emailCampaign->email->messageId()->delete();
+        $emailCampaign->email->related()->delete();
+        $emailCampaign->email()->delete();
+        delete($emailCampaign);
     }
 }
