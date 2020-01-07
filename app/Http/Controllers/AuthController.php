@@ -152,7 +152,7 @@ class AuthController extends Controller
         $company = Company::create($request->all());
         $firstDepartment = $company->departments()->create(['name' => 'Công ty', 'description' => 'Công ty']);
         $firstPosition = $company->positions()->create(['name' => 'CEO']);
-        $firstRole = $company->roles()->create(['name' => 'Full', 'code' => 'full']);
+        $firstRole = $company->roles()->create(['name' => 'Full']);
         $firstRole->menus()->attach(Menu::select('id')->get()->pluck('id')->all());
         CatalogSeeder::run($company->id);
         auth()->user()->update(['company_id' => $company->id, 'position_id' => $firstPosition->id, 'role_id' => $firstRole->id, 'department_id' => $firstDepartment->id]);
