@@ -119,5 +119,9 @@ class MenuSeeder extends Seeder
         $report->children()->create(['name' => 'Báo cáo động']);
         $report->children()->create(['name' => 'Chi tiết báo cáo']);
         $report->children()->create(['name' => 'Báo cáo công nợ']);
+
+        $report = Menu::create(['name' => 'Automation']);
+        $report->children()->create(['name' => 'Email tự động']);
+        $report->children()->create(['name' => 'Chi tiết email tự động']);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Catalog;
 use App\Contact;
 use App\Customer;
+use App\Exports\LeadExport;
 use App\Http\Requests\LeadRequest;
 use App\Http\Resources\LeadResource;
 use App\Http\Resources\LeadsResource;
@@ -66,7 +67,10 @@ class LeadController extends Controller
             if ($interactive == "task") $query = $query->doesntHave('tasks');
             if ($interactive == "note") $query = $query->doesntHave('notes');
         }
-        return LeadsResource::collection($query->paginate($perPage));
+        $export =  $request->query('export');
+        if ($export) return (new LeadExport($query))->download('CRM_Lead_Export.xlsx');
+        else
+            return LeadsResource::collection($query->paginate($perPage));
     }
 
     /**
